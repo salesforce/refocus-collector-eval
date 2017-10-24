@@ -1,0 +1,44 @@
+{
+  "name": "refocus-collector",
+  "version": "1.0.0",
+  "description": "Collector eval utils used by collector system and Refocus Sample Generator Template Utilities to validate transform and toUrl function.",
+  "main": "src/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "jscs-enforce": "./node_modules/jscs/bin/jscs src test",
+    "test": "npm run jscs-enforce && mocha -R dot --recursive test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/salesforce/refocus-collector-eval.git"
+  },
+  "author": "Salesforce CX Tools",
+  "license": "BSD-3-Clause",
+  "keywords": [
+    "refocus",
+    "collector",
+    "collectors",
+    "refocus-collector",
+    "eval",
+    "safeTransform",
+    "safeToUrl"
+  ],
+  "bugs": {
+    "url": "https://github.com/salesforce/refocus-collector-collector/issues"
+  },
+  "homepage": "https://github.com/salesforce/refocus-collector-eval#readme",
+  "dependencies": {
+    "chai": "^4.1.2",
+    "debug": "^3.1.0",
+    "errors": "^0.3.0",
+    "eslint": "^4.9.0",
+    "joi": "^13.0.1",
+    "jscs": "^3.0.7",
+    "mocha": "^4.0.1",
+    "vm2": "^3.5.2",
+    "winston": "^2.4.0"
+  },
+  "devDependencies": {}
+}
