@@ -6,9 +6,13 @@
  * https://opensource.org/licenses/BSD-3-Clause
  */
 
+/**
+ * src/evalUtils.js
+ */
+
 const debug = require('debug')('refocus-collector-eval:utils');
 const evalValidation = require('./evalValidation');
-const errors = require('../errors');
+const errors = require('./errors');
 const logger = require('winston');
 const sampleSchema = require('./schema').sample;
 const commonUtils = require('./common');

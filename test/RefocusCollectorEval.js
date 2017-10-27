@@ -7,13 +7,13 @@
  */
 
 /**
- * test/index.js
+ * test/RefocusCollectorEval.js
  */
 'use strict';
 const expect = require('chai').expect;
-const rce = require('../src/index');
+const rce = require('../src/RefocusCollectorEval');
 
-describe('test/index.js >', (done) => {
+describe('test/RefocusCollectorEval.js >', (done) => {
   describe('safeTransform >', (done) => {
     const validArgs = {
       ctx: { x: 123, y: 'abc|A2' },

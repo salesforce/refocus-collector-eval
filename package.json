@@ -1,8 +1,8 @@
 {
-  "name": "refocus-collector",
-  "version": "1.0.0",
-  "description": "Collector eval utils used by collector system and Refocus Sample Generator Template Utilities to validate transform and toUrl function.",
-  "main": "src/index.js",
+  "name": "@salesforce/refocus-collector-eval",
+  "version": "1.1.0",
+  "description": "Collector eval utils used by Refocus Collector System to validate transform and toUrl functions.",
+  "main": "src/RefocusCollectorEval.js",
   "directories": {
     "test": "test"
   },
@@ -30,15 +30,16 @@
   },
   "homepage": "https://github.com/salesforce/refocus-collector-eval#readme",
   "dependencies": {
-    "chai": "^4.1.2",
-    "debug": "^3.1.0",
     "errors": "^0.3.0",
-    "eslint": "^4.9.0",
     "joi": "^13.0.1",
-    "jscs": "^3.0.7",
-    "mocha": "^4.0.1",
     "vm2": "^3.5.2",
     "winston": "^2.4.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "jscs": "^3.0.7",
+    "mocha": "^4.0.1",
+    "eslint": "^4.9.0",
+    "chai": "^4.1.2",
+    "debug": "^3.1.0"
+  }
 }

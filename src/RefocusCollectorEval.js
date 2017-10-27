@@ -6,10 +6,13 @@
  * https://opensource.org/licenses/BSD-3-Clause
  */
 
+/**
+ * src/RefocusCollectorEval.js
+ */
 const debug = require('debug')('refocus-collector-eval:index');
-const utils = require('./utils/evalUtils');
+const utils = require('./evalUtils');
 const errors = require('./errors');
-const commonUtils = require('./utils/common');
+const commonUtils = require('./common');
 const SAMPLE_BODY_MAX_LEN = 4096;
 
 class RefocusCollectorEval {
@@ -80,6 +83,24 @@ class RefocusCollectorEval {
 
     debug('evalUtils.safeToUrl returning: ${retval}');
     return retval;
+  }
+
+  /*
+   * Check for a status code regex match which maps to a transform for
+   * error samples. Use the first one to match. If 200 is matched, it
+   * will override the default transform.
+   * @param {Object} tr - transform object.
+   * @param {String} status - Status code.
+   */
+  static statusCodeMatch(tr, status) {
+    if (tr.errorHandlers) {
+      Object.keys(tr.errorHandlers).forEach((statusMatcher) => {
+        const re = new RegExp(statusMatcher);
+        if (re.test(status)) {
+          return tr.errorHandlers[statusMatcher];
+        }
+      });
+    }
   }
 }
 

@@ -7,11 +7,11 @@
  */
 
 /**
- * test/utils/evalUtils.js
+ * test/evalUtils.js
  */
 'use strict';
 const expect = require('chai').expect;
-const eu = require('../../src/utils/evalUtils');
+const eu = require('../src/evalUtils');
 
 describe('test/utils/evalUtils.js >', (done) => {
   describe('validateTransformArgs >', (done) => {

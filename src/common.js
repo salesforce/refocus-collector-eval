@@ -6,6 +6,10 @@
  * https://opensource.org/licenses/BSD-3-Clause
  */
 
+/**
+ * src/common.js
+ */
+
 module.exports = {
   ERROR_MESSAGE: {
     TRANSFORM: {

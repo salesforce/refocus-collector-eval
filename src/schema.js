@@ -7,7 +7,7 @@
  */
 
 /**
- * src/utils/schema.js
+ * src/schema.js
  */
 const Joi = require('joi');
 
