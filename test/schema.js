@@ -67,5 +67,25 @@ describe('test/schema.js >', () => {
       .to.have.property('name', 'ValidationError');
       done();
     });
+
+    it('sample with empty messageBody', (done) => {
+      const sample = { name: 's|a', messageBody: '' };
+      expect(v.validate(sample)).to.have.property('error', null);
+      done();
+    });
+
+    it('sample with empty messageCode', (done) => {
+      const sample = { name: 's|a', messageCode: '' };
+      expect(v.validate(sample)).to.have.property('error', null);
+      done();
+    });
+
+    it('sample with long messageCode', (done) => {
+      const sample = { name: 's|a', messageCode: '1234567' };
+      const val = schema.sample.validate(sample);
+      expect(val).to.have.property('error')
+      .to.have.property('name', 'ValidationError');
+      done();
+    });
   }); // sample
 });
