@@ -14,8 +14,8 @@ const Joi = require('joi');
 const sample = Joi.object().keys({
   name: Joi.string().regex(/^[0-9A-Za-z_.\\-]{1,4096}\|[0-9A-Za-z_\\-]{1,60}$/)
     .required(),
-  messageBody: Joi.string().max(4096),
-  messageCode: Joi.string().max(5),
+  messageBody: Joi.string().max(4096).allow(''),
+  messageCode: Joi.string().max(5).allow(''),
   relatedLinks: Joi.array().items(
     Joi.object().keys({
       name: Joi.string().regex(/^[0-9A-Za-z_\\ -]{1,25}$/).required(),

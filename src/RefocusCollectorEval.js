@@ -9,11 +9,12 @@
 /**
  * src/RefocusCollectorEval.js
  */
-const debug = require('debug')('refocus-collector-eval:index');
+const debug = require('debug')('refocus-collector-eval:main');
 const utils = require('./evalUtils');
 const errors = require('./errors');
 const commonUtils = require('./common');
 const SAMPLE_BODY_MAX_LEN = 4096;
+const u = require('util');
 
 class RefocusCollectorEval {
 
@@ -37,7 +38,7 @@ class RefocusCollectorEval {
    *  samples
    */
   static safeTransform(functionBody, args) {
-    debug('Entered evalUtils.safeTransform');
+    debug('Entered evalUtils.safeTransform', args);
     if (typeof functionBody !== 'string') {
       const msg = 'Transform function body must be a string';
       throw new errors.FunctionBodyError(msg);
@@ -46,6 +47,10 @@ class RefocusCollectorEval {
     utils.validateTransformArgs(args);
     args.SAMPLE_BODY_MAX_LEN = SAMPLE_BODY_MAX_LEN;
     const retval = utils.safeEval(functionBody, args);
+    if (retval) {
+      debug('safeTransform generated %d samples: %j', retval.length, retval);
+    }
+
     utils.validateSamples(retval, args);
     debug('evalUtils.safeTransform returning %d samples: %j', retval.length,
       retval);
