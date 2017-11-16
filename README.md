@@ -22,7 +22,7 @@ Returns the matched function.
   const RefocusCollectorEval = require('@salesforce/refocus-collector-eval');
 
   const sampleArr = RefocusCollectorEval.safeTransform(transformFunc, args);
-  const url = RefocusCollectorEval.safeTransform(toUrlFunc, args);
+  const url = RefocusCollectorEval.safeToUrl(toUrlFunc, args);
   const func = RefocusCollectorEval.statusCodeMatch(transform, status);
   ```
 
