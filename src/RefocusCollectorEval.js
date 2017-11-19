@@ -100,14 +100,16 @@ class RefocusCollectorEval {
    * @param {String} status - Status code.
    */
   static statusCodeMatch(tr, status) {
+    let func;
     if (tr.errorHandlers) {
       Object.keys(tr.errorHandlers).forEach((statusMatcher) => {
         const re = new RegExp(statusMatcher);
         if (re.test(status)) {
-          return tr.errorHandlers[statusMatcher];
+          func = tr.errorHandlers[statusMatcher];
         }
       });
     }
+    return func;
   }
 
   /**
