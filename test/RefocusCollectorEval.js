@@ -14,6 +14,147 @@ const expect = require('chai').expect;
 const rce = require('../src/RefocusCollectorEval');
 
 describe('test/RefocusCollectorEval.js >', (done) => {
+  describe('statusCodeMatch >', (done) => {
+    const collectRes = {
+      name: 'mockGenerator',
+      res: {
+        statusCode: 200,
+      },
+      generatorTemplate: {
+        transform: {
+          transform: 'return [{ name: "S1.S2|A1", value: "10" },' +
+          ' { name: "S1.S2|A2", value: "2" }]',
+          errorHandlers: {
+            404: 'return [{ name: "S1.S2|A1", messageBody: "NOT FOUND" },' +
+            ' { name: "S1.S2|A2", messageBody: "NOT FOUND" }]',
+            '40[13]': 'return [{ name: "S1.S2|A1", messageBody: ' +
+            '"UNAUTHORIZED OR FORBIDDEN" },' +
+            ' { name: "S1.S2|A2", messageBody: "UNAUTHORIZED OR FORBIDDEN" }]',
+            500: 'return [{ name: "S1.S2|A1", messageBody: "SERVER 500 ERROR" },' +
+            ' { name: "S1.S2|A2", messageBody: "SERVER 500 ERROR" }]',
+            '5..': 'return [{ name: "S1.S2|A1", messageBody: "SERVER ERROR" },' +
+            ' { name: "S1.S2|A2", messageBody: "SERVER ERROR" }]',
+          },
+        },
+      },
+    };
+
+    it('error handler match - 404', (done) => {
+      try {
+        collectRes.res.statusCode = 404;
+        const expectedRetVal = collectRes.generatorTemplate.transform
+        .errorHandlers['404'];
+        const retval = rce.statusCodeMatch(collectRes.generatorTemplate
+          .transform, collectRes.res.statusCode);
+        expect(retval).to.equal(expectedRetVal);
+        done();
+      } catch (err) {
+        done(err);
+      }
+    });
+
+    it('error handler match - 401', (done) => {
+      try {
+        collectRes.res.statusCode = 401;
+        const expectedRetVal = collectRes.generatorTemplate.transform
+          .errorHandlers['40[13]'];
+        const retval = rce.statusCodeMatch(collectRes.generatorTemplate
+          .transform, collectRes.res.statusCode);
+        expect(retval).to.equal(expectedRetVal);
+        done();
+      } catch (err) {
+        done(err);
+      }
+    });
+
+    it('error handler match - 403', (done) => {
+      try {
+        collectRes.res.statusCode = 403;
+        const expectedRetVal = collectRes.generatorTemplate.transform
+          .errorHandlers['40[13]'];
+        const retval = rce.statusCodeMatch(collectRes.generatorTemplate
+          .transform, collectRes.res.statusCode);
+        expect(retval).to.equal(expectedRetVal);
+        done();
+      } catch (err) {
+        done(err);
+      }
+    });
+
+    it('error handler match - 500', (done) => {
+      try {
+        collectRes.res.statusCode = 500;
+        const expectedRetVal = collectRes.generatorTemplate.transform
+          .errorHandlers['5..'];
+        const retval = rce.statusCodeMatch(collectRes.generatorTemplate
+          .transform, collectRes.res.statusCode);
+        expect(retval).to.equal(expectedRetVal);
+        done();
+      } catch (err) {
+        done(err);
+      }
+    });
+
+    it('error handler match - 503', (done) => {
+      try {
+        collectRes.res.statusCode = 503;
+        const expectedRetVal = collectRes.generatorTemplate.transform
+          .errorHandlers['5..'];
+        const retval = rce.statusCodeMatch(collectRes.generatorTemplate
+          .transform, collectRes.res.statusCode);
+        expect(retval).to.equal(expectedRetVal);
+        done();
+      } catch (err) {
+        done(err);
+      }
+    });
+
+    it('error handler match - override 200', (done) => {
+      try {
+        collectRes.res.statusCode = 200;
+        collectRes.generatorTemplate.transform.errorHandlers['200'] =
+          'return [{ name: "S1.S2|A1", messageBody: "OK" },'
+          + ' { name: "S1.S2|A2", messageBody: "OK" }]';
+
+        const expectedRetVal = collectRes.generatorTemplate.transform
+          .errorHandlers['200'];
+        const retval = rce.statusCodeMatch(collectRes.generatorTemplate
+          .transform, collectRes.res.statusCode);
+        expect(retval).to.equal(expectedRetVal);
+        done();
+      } catch (err) {
+        done(err);
+      }
+    });
+
+    it('error handler no match', (done) => {
+      try {
+        collectRes.res.statusCode = 429;
+        const retval = rce.statusCodeMatch(collectRes.generatorTemplate
+          .transform, collectRes.res.statusCode);
+        expect(retval).to.equal(undefined);
+        done();
+      } catch (err) {
+        done(err);
+      }
+    });
+
+    it('error handler multiple match - should return the last error ' +
+      'transform match', (done) => {
+      try {
+        collectRes.res.statusCode = 500;
+        const expectedRetVal = collectRes.generatorTemplate.transform
+          .errorHandlers['5..'];
+        const retval = rce.statusCodeMatch(collectRes.generatorTemplate
+          .transform, collectRes.res.statusCode);
+        expect(retval).to.equal(expectedRetVal);
+        done();
+      } catch (err) {
+        done(err);
+      }
+    });
+  }); // statusCodeMatch
+
   describe('safeTransform >', (done) => {
     const validArgs = {
       ctx: { x: 123, y: 'abc|A2' },

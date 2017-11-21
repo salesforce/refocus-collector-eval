@@ -93,21 +93,24 @@ class RefocusCollectorEval {
   }
 
   /*
-   * Check for a status code regex match which maps to a transform for
-   * error samples. Use the first one to match. If 200 is matched, it
-   * will override the default transform.
+   * Checks for a status code regex match which maps to a transform for
+   * error samples and returns the last error transform matched. If 200 is
+   * matched, it will override the default transform.
    * @param {Object} tr - transform object.
    * @param {String} status - Status code.
    */
   static statusCodeMatch(tr, status) {
+    let func;
     if (tr.errorHandlers) {
       Object.keys(tr.errorHandlers).forEach((statusMatcher) => {
         const re = new RegExp(statusMatcher);
         if (re.test(status)) {
-          return tr.errorHandlers[statusMatcher];
+          func = tr.errorHandlers[statusMatcher];
         }
       });
     }
+
+    return func;
   }
 
   /**
