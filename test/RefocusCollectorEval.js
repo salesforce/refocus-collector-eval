@@ -30,6 +30,8 @@ describe('test/RefocusCollectorEval.js >', (done) => {
             '40[13]': 'return [{ name: "S1.S2|A1", messageBody: ' +
             '"UNAUTHORIZED OR FORBIDDEN" },' +
             ' { name: "S1.S2|A2", messageBody: "UNAUTHORIZED OR FORBIDDEN" }]',
+            '500': 'return [{ name: "S1.S2|A1", messageBody: "SERVER 500 ERROR" },' +
+            ' { name: "S1.S2|A2", messageBody: "SERVER 500 ERROR" }]',
             '5..': 'return [{ name: "S1.S2|A1", messageBody: "SERVER ERROR" },' +
             ' { name: "S1.S2|A2", messageBody: "SERVER ERROR" }]',
           },
@@ -131,6 +133,21 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         const retval = rce.statusCodeMatch(collectRes.generatorTemplate
           .transform, collectRes.res.statusCode);
         expect(retval).to.equal(undefined);
+        done();
+      } catch (err) {
+        done(err);
+      }
+    });
+
+    it('error handler multiple match - should return the last error ' +
+      'transform match', (done) => {
+      try {
+        collectRes.res.statusCode = 500;
+        const expectedRetVal = collectRes.generatorTemplate.transform
+          .errorHandlers['5..'];
+        const retval = rce.statusCodeMatch(collectRes.generatorTemplate
+          .transform, collectRes.res.statusCode);
+        expect(retval).to.equal(expectedRetVal);
         done();
       } catch (err) {
         done(err);
