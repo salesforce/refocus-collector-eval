@@ -30,7 +30,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
             '40[13]': 'return [{ name: "S1.S2|A1", messageBody: ' +
             '"UNAUTHORIZED OR FORBIDDEN" },' +
             ' { name: "S1.S2|A2", messageBody: "UNAUTHORIZED OR FORBIDDEN" }]',
-            '500': 'return [{ name: "S1.S2|A1", messageBody: "SERVER 500 ERROR" },' +
+            500: 'return [{ name: "S1.S2|A1", messageBody: "SERVER 500 ERROR" },' +
             ' { name: "S1.S2|A2", messageBody: "SERVER 500 ERROR" }]',
             '5..': 'return [{ name: "S1.S2|A1", messageBody: "SERVER ERROR" },' +
             ' { name: "S1.S2|A2", messageBody: "SERVER ERROR" }]',
@@ -153,7 +153,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         done(err);
       }
     });
-  }) // statusCodeMatch
+  }); // statusCodeMatch
 
   describe('safeTransform >', (done) => {
     const validArgs = {
