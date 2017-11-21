@@ -13,8 +13,10 @@ const debug = require('debug')('refocus-collector-eval:main');
 const utils = require('./evalUtils');
 const errors = require('./errors');
 const commonUtils = require('./common');
-const SAMPLE_BODY_MAX_LEN = 4096;
 const u = require('util');
+const schema = require('./schema');
+
+const SAMPLE_BODY_MAX_LEN = 4096;
 
 class RefocusCollectorEval {
 
@@ -106,6 +108,14 @@ class RefocusCollectorEval {
         }
       });
     }
+  }
+
+  /**
+   * Schema for sample validation
+   * @return {Object} - Joi object
+   */
+  static get sampleSchema() {
+    return schema.sample;
   }
 }
 

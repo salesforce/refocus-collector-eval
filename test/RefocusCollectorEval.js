@@ -339,4 +339,25 @@ describe('test/RefocusCollectorEval.js >', (done) => {
       }
     });
   }); // safeToUrl
+
+  describe('sampleSchema >', (done) => {
+    it('we can access sample schema validation object, valid sample',
+    (done) => {
+      const joiObj = rce.sampleSchema;
+      const val = joiObj.validate({ name: 'root.child|aspName', value: '0' });
+      expect(joiObj.isJoi).to.be.equal(true);
+      expect(val).to.have.property('error', null);
+      done();
+    });
+
+    it('we can access sample schema validation object, invalid sample',
+    (done) => {
+      const joiObj = rce.sampleSchema;
+      const val = joiObj.validate({ notName: 'root.child|aspName' });
+      expect(joiObj.isJoi).to.be.equal(true);
+      expect(val).to.have.property('error')
+      .to.have.property('name', 'ValidationError');
+      done();
+    });
+  });
 });
