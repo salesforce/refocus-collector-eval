@@ -14,7 +14,7 @@ const expect = require('chai').expect;
 const rce = require('../src/RefocusCollectorEval');
 
 describe('test/RefocusCollectorEval.js >', (done) => {
-  describe('statusCodeMatch >', (done) => {
+  describe('getTransformFunction >', (done) => {
     const collectRes = {
       name: 'mockGenerator',
       res: {
@@ -22,7 +22,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
       },
       generatorTemplate: {
         transform: {
-          transform: 'return [{ name: "S1.S2|A1", value: "10" },' +
+          default: 'return [{ name: "S1.S2|A1", value: "10" },' +
           ' { name: "S1.S2|A2", value: "2" }]',
           errorHandlers: {
             404: 'return [{ name: "S1.S2|A1", messageBody: "NOT FOUND" },' +
@@ -44,7 +44,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         collectRes.res.statusCode = 404;
         const expectedRetVal = collectRes.generatorTemplate.transform
         .errorHandlers['404'];
-        const retval = rce.statusCodeMatch(collectRes.generatorTemplate
+        const retval = rce.getTransformFunction(collectRes.generatorTemplate
           .transform, collectRes.res.statusCode);
         expect(retval).to.equal(expectedRetVal);
         done();
@@ -58,7 +58,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         collectRes.res.statusCode = 401;
         const expectedRetVal = collectRes.generatorTemplate.transform
           .errorHandlers['40[13]'];
-        const retval = rce.statusCodeMatch(collectRes.generatorTemplate
+        const retval = rce.getTransformFunction(collectRes.generatorTemplate
           .transform, collectRes.res.statusCode);
         expect(retval).to.equal(expectedRetVal);
         done();
@@ -72,7 +72,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         collectRes.res.statusCode = 403;
         const expectedRetVal = collectRes.generatorTemplate.transform
           .errorHandlers['40[13]'];
-        const retval = rce.statusCodeMatch(collectRes.generatorTemplate
+        const retval = rce.getTransformFunction(collectRes.generatorTemplate
           .transform, collectRes.res.statusCode);
         expect(retval).to.equal(expectedRetVal);
         done();
@@ -86,7 +86,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         collectRes.res.statusCode = 500;
         const expectedRetVal = collectRes.generatorTemplate.transform
           .errorHandlers['5..'];
-        const retval = rce.statusCodeMatch(collectRes.generatorTemplate
+        const retval = rce.getTransformFunction(collectRes.generatorTemplate
           .transform, collectRes.res.statusCode);
         expect(retval).to.equal(expectedRetVal);
         done();
@@ -100,7 +100,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         collectRes.res.statusCode = 503;
         const expectedRetVal = collectRes.generatorTemplate.transform
           .errorHandlers['5..'];
-        const retval = rce.statusCodeMatch(collectRes.generatorTemplate
+        const retval = rce.getTransformFunction(collectRes.generatorTemplate
           .transform, collectRes.res.statusCode);
         expect(retval).to.equal(expectedRetVal);
         done();
@@ -118,7 +118,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
 
         const expectedRetVal = collectRes.generatorTemplate.transform
           .errorHandlers['200'];
-        const retval = rce.statusCodeMatch(collectRes.generatorTemplate
+        const retval = rce.getTransformFunction(collectRes.generatorTemplate
           .transform, collectRes.res.statusCode);
         expect(retval).to.equal(expectedRetVal);
         done();
@@ -130,9 +130,9 @@ describe('test/RefocusCollectorEval.js >', (done) => {
     it('error handler no match', (done) => {
       try {
         collectRes.res.statusCode = 429;
-        const retval = rce.statusCodeMatch(collectRes.generatorTemplate
+        const retval = rce.getTransformFunction(collectRes.generatorTemplate
           .transform, collectRes.res.statusCode);
-        expect(retval).to.equal(undefined);
+        expect(retval).to.equal(false);
         done();
       } catch (err) {
         done(err);
@@ -145,7 +145,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         collectRes.res.statusCode = 500;
         const expectedRetVal = collectRes.generatorTemplate.transform
           .errorHandlers['5..'];
-        const retval = rce.statusCodeMatch(collectRes.generatorTemplate
+        const retval = rce.getTransformFunction(collectRes.generatorTemplate
           .transform, collectRes.res.statusCode);
         expect(retval).to.equal(expectedRetVal);
         done();
@@ -153,7 +153,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         done(err);
       }
     });
-  }); // statusCodeMatch
+  }); // getTransformFunction
 
   describe('safeTransform >', (done) => {
     const validArgs = {
@@ -210,7 +210,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         if (err.name === 'TransformError') {
           done();
         } else {
-          done('Expecting TransformError here');
+          done(err);
         }
       }
     });
@@ -223,7 +223,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         if (err.name === 'TransformError') {
           done();
         } else {
-          done('Expecting TransformError here');
+          done(err);
         }
       }
     });
@@ -236,7 +236,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         if (err.name === 'TransformError') {
           done();
         } else {
-          done('Expecting TransformError here');
+          done(err);
         }
       }
     });
@@ -249,7 +249,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         if (err.name === 'TransformError') {
           done();
         } else {
-          done('Expecting TransformError here');
+          done(err);
         }
       }
     });
@@ -262,7 +262,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         if (err.name === 'TransformError') {
           done();
         } else {
-          done('Expecting TransformError here');
+          done(err);
         }
       }
     });
@@ -275,7 +275,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         if (err.name === 'TransformError') {
           done();
         } else {
-          done('Expecting TransformError here');
+          done(err);
         }
       }
     });
@@ -289,7 +289,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         if (err.name === 'TransformError') {
           done();
         } else {
-          done('Expecting TransformError here');
+          done(err);
         }
       }
     });
@@ -304,7 +304,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         if (err.name === 'TransformError') {
           done();
         } else {
-          done('Expecting TransformError here');
+          done(err);
         }
       }
     });
@@ -317,8 +317,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         if (err.name === 'FunctionBodyError') {
           done();
         } else {
-          console.log(err);
-          done('Expecting FunctionBodyError here');
+          done(err);
         }
       }
     });
@@ -331,7 +330,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         if (err.name === 'FunctionBodyError') {
           done();
         } else {
-          done('Expecting FunctionBodyError here');
+          done(err);
         }
       }
     });
@@ -344,7 +343,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         if (err.name === 'FunctionBodyError') {
           done();
         } else {
-          done('Expecting FunctionBodyError here');
+          done(err);
         }
       }
     });
@@ -383,7 +382,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         if (err.name === 'ToUrlError') {
           done();
         } else {
-          done('Expecting ToUrlError here');
+          done(err);
         }
       }
     });
@@ -396,7 +395,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         if (err.name === 'ToUrlError') {
           done();
         } else {
-          done('Expecting ToUrlError here');
+          done(err);
         }
       }
     });
@@ -409,7 +408,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         if (err.name === 'ToUrlError') {
           done();
         } else {
-          done('Expecting ToUrlError here');
+          done(err);
         }
       }
     });
@@ -422,7 +421,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         if (err.name === 'ToUrlError') {
           done();
         } else {
-          done('Expecting ToUrlError here');
+          done(err);
         }
       }
     });
@@ -435,7 +434,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         if (err.name === 'ToUrlError') {
           done();
         } else {
-          done('Expecting ToUrlError here');
+          done(err);
         }
       }
     });
@@ -448,8 +447,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         if (err.name === 'FunctionBodyError') {
           done();
         } else {
-          console.log(err);
-          done('Expecting FunctionBodyError here');
+          done(err);
         }
       }
     });
@@ -462,7 +460,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         if (err.name === 'FunctionBodyError') {
           done();
         } else {
-          done('Expecting FunctionBodyError here');
+          done(err);
         }
       }
     });
@@ -475,7 +473,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
         if (err.name === 'FunctionBodyError') {
           done();
         } else {
-          done('Expecting FunctionBodyError here');
+          done(err);
         }
       }
     });

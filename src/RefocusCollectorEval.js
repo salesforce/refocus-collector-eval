@@ -19,7 +19,6 @@ const schema = require('./schema');
 const SAMPLE_BODY_MAX_LEN = 4096;
 
 class RefocusCollectorEval {
-
   /**
    * Safely executes the transform function with the arguments provided.
    *
@@ -57,7 +56,7 @@ class RefocusCollectorEval {
     debug('evalUtils.safeTransform returning %d samples: %j', retval.length,
       retval);
     return retval;
-  }
+  } // safeTransform
 
   /**
    * Safely executes the toUrl function with the arguments provided.
@@ -90,28 +89,49 @@ class RefocusCollectorEval {
 
     debug('evalUtils.safeToUrl returning: ${retval}');
     return retval;
-  }
+  } // safeToUrl
 
   /*
-   * Checks for a status code regex match which maps to a transform for
-   * error samples and returns the last error transform matched. If 200 is
-   * matched, it will override the default transform.
-   * @param {Object} tr - transform object.
+   * Returns the transform function for the given status, based on this order
+   * of precedence:
+   * (1) the first status code match from transform.errorHandlers
+   * (2) transform.default (for status 2xx only)
+   * (3) false
+   *
+   * @param {Object} transform - the sample generator template's transform object.
    * @param {String} status - Status code.
+   * @returns {Any} a transform function or false
    */
-  static statusCodeMatch(tr, status) {
-    let func;
-    if (tr.errorHandlers) {
-      Object.keys(tr.errorHandlers).forEach((statusMatcher) => {
-        const re = new RegExp(statusMatcher);
+  static getTransformFunction(transform, status) {
+    /*
+     * First check for a status match in transform.errorHandlers (including any
+     * "override" for any 2xx status the template may define).
+     */
+    if (transform.errorHandlers) {
+      /*
+       * Sort the errorHandlers keys alphabetically so there's a predictable
+       * order of evaluation, since we return the "first" match.
+       */
+      const statusMatchers = Object.keys(transform.errorHandlers).sort();
+      for (let i = 0; i < statusMatchers.length; i++) {
+        const re = new RegExp(statusMatchers[i]);
         if (re.test(status)) {
-          func = tr.errorHandlers[statusMatcher];
+          return transform.errorHandlers[statusMatchers[i]];
         }
-      });
+      }
     }
 
-    return func;
-  }
+    /*
+     * There is no errorHandler defined for this status. If the status is 2xx,
+     * use transform.default.
+     */
+    if (/2\\d\\d/.test(status)) {
+      return transform.default;
+    }
+
+    /* There is no errorHandler and this is NOT a 2xx status. */
+    return false;
+  } // getTransformFunction
 
   /**
    * Schema for sample validation
