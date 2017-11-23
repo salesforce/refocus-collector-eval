@@ -18,7 +18,7 @@ Safely executes the given toUrl function with the arguments provided. Returns th
 
 ### RefocusCollectorEval.getTransformFunction(transform, status)
 
-Returns a transform function based on the status code provided. Checks for a status match in transform.errorHandlers (including any "override" for any 2xx status the template may define). If there is an errorHandler defined for the status code, returns the first match (transform.errorHandler keys sorted alphabetically). If there is no errorHandler defined for the status code provided, if the status code is 2xx, returns transform.default. If there is no errorHandler AND the status code is NOT 2xx, returns false.
+Returns a transform function based on the status code provided. Checks for an exact status match from transform.errorHandlers. If there is an exact match, returns that one. If no exact match is found, checks for a regex status match. If there is an errorHandler defined for the status code based on a regex match, returns the first regex match found. If there is no errorHandler defined for the status code provided, if the status code is 2xx, returns transform.default. If there is no errorHandler AND the status code is NOT 2xx, returns false.
 
 ### RefocusCollectorEval.sampleSchema
 

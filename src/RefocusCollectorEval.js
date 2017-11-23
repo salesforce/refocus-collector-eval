@@ -15,7 +15,7 @@ const errors = require('./errors');
 const commonUtils = require('./common');
 const u = require('util');
 const schema = require('./schema');
-
+const RADIX = 10;
 const SAMPLE_BODY_MAX_LEN = 4096;
 
 class RefocusCollectorEval {
@@ -94,9 +94,10 @@ class RefocusCollectorEval {
   /*
    * Returns the transform function for the given status, based on this order
    * of precedence:
-   * (1) the first status code match from transform.errorHandlers
-   * (2) transform.default (for status 2xx only)
-   * (3) false
+   * (1) an exact match from transform.errorHandlers
+   * (2) the first regex match from transform.errorHandlers
+   * (3) transform.default (for status 2xx only)
+   * (4) false
    *
    * @param {Object} transform - the sample generator template's transform object.
    * @param {String} status - Status code.
@@ -109,16 +110,37 @@ class RefocusCollectorEval {
      */
     if (transform.errorHandlers) {
       /*
-       * Sort the errorHandlers keys alphabetically so there's a predictable
-       * order of evaluation, since we return the "first" match.
+       * Exact matches trump regex matches. Sort the errorHandlers keys
+       * alphabetically so there's a predictable order of evaluation, since we
+       * return the "first" regex match if there is no exact match.
        */
       const statusMatchers = Object.keys(transform.errorHandlers).sort();
+      let regexMatch = false;
       for (let i = 0; i < statusMatchers.length; i++) {
-        const re = new RegExp(statusMatchers[i]);
-        if (re.test(status)) {
-          return transform.errorHandlers[statusMatchers[i]];
+        const sm = statusMatchers[i];
+        /* Short circuit for exact match! */
+        if (/\\d\\d\\d/.test(sm) && sm === status) {
+          return transform.errorHandlers[sm];
+        }
+
+        /*
+         * Check for regex match if we haven't already found one, but even  if
+         * we find one, keep looping over the rest of the keys in case there's
+         * an exact match.
+         */
+        if (!regexMatch) {
+          const re = new RegExp(sm);
+          if (re.test(status)) {
+            regexMatch = transform.errorHandlers[sm];
+          }
         }
       }
+
+      /*
+       * Finished iterating, so we know there was no exact match. If we found
+       * a regex match, return that one.
+       */
+      if (regexMatch) return regexMatch;
     }
 
     /*
