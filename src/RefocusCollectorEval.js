@@ -104,12 +104,10 @@ class RefocusCollectorEval {
    * @returns {Any} a transform function or false
    */
   static getTransformFunction(transform, status) {
-    /*
-     * First check for a status match in transform.errorHandlers (including any
-     * "override" for any 2xx status the template may define).
-     */
     if (transform.errorHandlers) {
       /*
+       * First check for a status match in transform.errorHandlers (including
+       * any "override" for any 2xx status the template may define).
        * Exact matches trump regex matches. Sort the errorHandlers keys
        * alphabetically so there's a predictable order of evaluation, since we
        * return the "first" regex match if there is no exact match.
@@ -124,7 +122,7 @@ class RefocusCollectorEval {
         }
 
         /*
-         * Check for regex match if we haven't already found one, but even  if
+         * Check for regex match if we haven't already found one, but even if
          * we find one, keep looping over the rest of the keys in case there's
          * an exact match.
          */
