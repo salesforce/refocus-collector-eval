@@ -41,6 +41,20 @@ describe('test/getTransformFunction.js >', (done) => {
     },
   };
 
+  it('2xx', (done) => {
+    try {
+      collectRes.res.statusCode = 200;
+      const expectedRetVal = collectRes.generatorTemplate.transform
+        .default;
+      const retval = getTransformFunction(collectRes.generatorTemplate
+        .transform, collectRes.res.statusCode);
+      expect(retval).to.equal(expectedRetVal);
+      done();
+    } catch (err) {
+      done(err);
+    }
+  });
+
   it('error handler match - 404', (done) => {
     try {
       collectRes.res.statusCode = 404;
@@ -140,8 +154,7 @@ describe('test/getTransformFunction.js >', (done) => {
     }
   });
 
-  it('error handler multiple match - should return the last error ' +
-    'transform match', (done) => {
+  it('error handler multiple match - should return first match', (done) => {
     try {
       collectRes.res.statusCode = 500;
       const expectedRetVal = collectRes.generatorTemplate.transform

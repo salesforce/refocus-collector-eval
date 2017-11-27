@@ -145,7 +145,7 @@ class RefocusCollectorEval {
      * There is no errorHandler defined for this status. If the status is 2xx,
      * use transform.default.
      */
-    if (/2\\d\\d/.test(status)) {
+    if (/2\d\d/.test(status)) {
       return transform.default;
     }
 
