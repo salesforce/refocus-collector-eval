@@ -47,12 +47,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('object with no attributes', (done) => {
       try {
         eu.validateTransformArgs({});
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -60,12 +60,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('object with missing or inorrect attributes', (done) => {
       try {
         eu.validateTransformArgs({ ctx: {} });
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -73,12 +73,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('empty', (done) => {
       try {
         eu.validateTransformArgs();
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -86,12 +86,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('undefined', (done) => {
       try {
         eu.validateTransformArgs(undefined);
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -99,12 +99,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('null', (done) => {
       try {
         eu.validateTransformArgs(null);
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -112,12 +112,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('number', (done) => {
       try {
         eu.validateTransformArgs(123);
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -125,12 +125,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('array', (done) => {
       try {
         eu.validateTransformArgs([1, 2, 3]);
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -138,12 +138,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('string', (done) => {
       try {
         eu.validateTransformArgs('abc defgh');
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -151,12 +151,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('boolean true', (done) => {
       try {
         eu.validateTransformArgs(true);
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -164,12 +164,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('boolean false', (done) => {
       try {
         eu.validateTransformArgs(false);
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -192,12 +192,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('object with no attributes', (done) => {
       try {
         eu.validateToUrlArgs({});
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -205,12 +205,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('object with missing or inorrect attributes', (done) => {
       try {
         eu.validateToUrlArgs({ ctx: {} });
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -218,12 +218,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('empty', (done) => {
       try {
         eu.validateToUrlArgs();
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -231,12 +231,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('undefined', (done) => {
       try {
         eu.validateToUrlArgs(undefined);
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -244,12 +244,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('null', (done) => {
       try {
         eu.validateToUrlArgs(null);
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -257,12 +257,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('number', (done) => {
       try {
         eu.validateToUrlArgs(123);
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -270,12 +270,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('array', (done) => {
       try {
         eu.validateToUrlArgs([1, 2, 3]);
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -283,12 +283,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('string', (done) => {
       try {
         eu.validateToUrlArgs('abc defgh');
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -296,12 +296,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('boolean true', (done) => {
       try {
         eu.validateToUrlArgs(true);
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -309,12 +309,12 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('boolean false', (done) => {
       try {
         eu.validateToUrlArgs(false);
-        done('Expecting ArgsError');
+        done(new Error('Expecting ArgsError'));
       } catch (err) {
         if (err.name === 'ArgsError') {
           done();
         } else {
-          done('Expecting ArgsError here');
+          done(new Error('Expecting ArgsError here'));
         }
       }
     });
@@ -350,12 +350,12 @@ describe('test/utils/evalUtils.js >', (done) => {
       `;
       try {
         eu.safeEval(str, ctx);
-        done('Expecting FunctionBodyError here');
+        done(new Error('Expecting FunctionBodyError here'));
       } catch (err) {
         if (err.name === 'FunctionBodyError') {
           done();
         } else {
-          done('Expecting FunctionBodyError here');
+          done(new Error('Expecting FunctionBodyError here'));
         }
       }
     });
@@ -372,12 +372,12 @@ describe('test/utils/evalUtils.js >', (done) => {
       `;
       try {
         eu.safeEval(str, ctx);
-        done('Expecting FunctionBodyError here');
+        done(new Error('Expecting FunctionBodyError here'));
       } catch (err) {
         if (err.name === 'FunctionBodyError') {
           done();
         } else {
-          done('Expecting FunctionBodyError here');
+          done(new Error('Expecting FunctionBodyError here'));
         }
       }
     });
@@ -386,12 +386,12 @@ describe('test/utils/evalUtils.js >', (done) => {
       const str = `return module.exports`;
       try {
         eu.safeEval(str);
-        done('Expecting FunctionBodyError here');
+        done(new Error('Expecting FunctionBodyError here'));
       } catch (err) {
         if (err.name === 'FunctionBodyError') {
           done();
         } else {
-          done('Expecting FunctionBodyError here');
+          done(new Error('Expecting FunctionBodyError here'));
         }
       }
     });
@@ -400,12 +400,12 @@ describe('test/utils/evalUtils.js >', (done) => {
       const str = `return exports`;
       try {
         eu.safeEval(str);
-        done('Expecting FunctionBodyError here');
+        done(new Error('Expecting FunctionBodyError here'));
       } catch (err) {
         if (err.name === 'FunctionBodyError') {
           done();
         } else {
-          done('Expecting FunctionBodyError here');
+          done(new Error('Expecting FunctionBodyError here'));
         }
       }
     });
@@ -415,12 +415,12 @@ describe('test/utils/evalUtils.js >', (done) => {
       const str = `eval('3+3')`;
       try {
         eu.safeEval(str);
-        done('Expecting FunctionBodyError here');
+        done(new Error('Expecting FunctionBodyError here'));
       } catch (err) {
         if (err.name === 'FunctionBodyError') {
           done();
         } else {
-          done('Expecting FunctionBodyError here');
+          done(new Error('Expecting FunctionBodyError here'));
         }
       }
     });
@@ -429,12 +429,12 @@ describe('test/utils/evalUtils.js >', (done) => {
       const str = `return process.env`;
       try {
         eu.safeEval(str);
-        done('Expecting FunctionBodyError here');
+        done(new Error('Expecting FunctionBodyError here'));
       } catch (err) {
         if (err.name === 'FunctionBodyError') {
           done();
         } else {
-          done('Expecting FunctionBodyError here');
+          done(new Error('Expecting FunctionBodyError here'));
         }
       }
     });
@@ -443,12 +443,12 @@ describe('test/utils/evalUtils.js >', (done) => {
       const str = `return setTimeout(() => 'Hi!', 1);`;
       try {
         eu.safeEval(str);
-        done('Expecting FunctionBodyError here');
+        done(new Error('Expecting FunctionBodyError here'));
       } catch (err) {
         if (err.name === 'FunctionBodyError') {
           done();
         } else {
-          done('Expecting FunctionBodyError here');
+          done(new Error('Expecting FunctionBodyError here'));
         }
       }
     });
@@ -457,12 +457,12 @@ describe('test/utils/evalUtils.js >', (done) => {
       const str = `return setInterval(() => 'Hi!', 1);`;
       try {
         eu.safeEval(str);
-        done('Expecting FunctionBodyError here');
+        done(new Error('Expecting FunctionBodyError here'));
       } catch (err) {
         if (err.name === 'FunctionBodyError') {
           done();
         } else {
-          done('Expecting FunctionBodyError here');
+          done(new Error('Expecting FunctionBodyError here'));
         }
       }
     });
@@ -471,12 +471,12 @@ describe('test/utils/evalUtils.js >', (done) => {
       const str = `return __dirname`;
       try {
         eu.safeEval(str);
-        done('Expecting FunctionBodyError here');
+        done(new Error('Expecting FunctionBodyError here'));
       } catch (err) {
         if (err.name === 'FunctionBodyError') {
           done();
         } else {
-          done('Expecting FunctionBodyError here');
+          done(new Error('Expecting FunctionBodyError here'));
         }
       }
     });
@@ -485,12 +485,12 @@ describe('test/utils/evalUtils.js >', (done) => {
       const str = `return __filename`;
       try {
         eu.safeEval(str);
-        done('Expecting FunctionBodyError here');
+        done(new Error('Expecting FunctionBodyError here'));
       } catch (err) {
         if (err.name === 'FunctionBodyError') {
           done();
         } else {
-          done('Expecting FunctionBodyError here');
+          done(new Error('Expecting FunctionBodyError here'));
         }
       }
     });
@@ -573,7 +573,7 @@ describe('test/utils/evalUtils.js >', (done) => {
         'return 0; ';
       try {
         eu.safeEval(str);
-        done('Expecting error');
+        done(new Error('Expecting error'));
       } catch (err) {
         expect(err.name).to.equal('FunctionBodyError');
         done();
@@ -619,7 +619,7 @@ describe('test/utils/evalUtils.js >', (done) => {
       const str = 'let i = 0; while (true) { i++ } return i;';
       try {
         const retval = eu.safeEval(str);
-        done('Expecting "Script execution timed out."');
+        done(new Error('Expecting "Script execution timed out."'));
       } catch (err) {
         expect(err).to.have.property('name', 'FunctionBodyError');
         expect(err.message).to.contain('Script execution timed out.');
@@ -684,7 +684,7 @@ describe('test/utils/evalUtils.js >', (done) => {
           `console.error('3');console.warn('4');`;
         try {
           eu.safeEval(str, {}, true);
-          done('Expecting FunctionBodyError here');
+          done(new Error('Expecting FunctionBodyError here'));
         } catch (err) {
           if (err.name === 'FunctionBodyError') {
             expect(spies.log.callCount).to.equal(1);
@@ -697,7 +697,7 @@ describe('test/utils/evalUtils.js >', (done) => {
             expect(spies.warn.calledWith('4')).to.be.true;
             done();
           } else {
-            done('Expecting FunctionBodyError here');
+            done(new Error('Expecting FunctionBodyError here'));
           }
         }
       });
@@ -715,7 +715,7 @@ describe('test/utils/evalUtils.js >', (done) => {
       };
       try {
         eu.validateSamples(sampleArr, gen);
-        done('Expecting TransformError');
+        done(new Error('Expecting TransformError'));
       } catch (err) {
         expect(err.message).to.be.equal(
           'The transform function must return an array.'
@@ -733,7 +733,7 @@ describe('test/utils/evalUtils.js >', (done) => {
       };
       try {
         eu.validateSamples(sampleArr, gen);
-        done('Expecting TransformError');
+        done(new Error('Expecting TransformError'));
       } catch (err) {
         expect(err.name).to.be.equal('TransformError');
         done();
@@ -749,7 +749,7 @@ describe('test/utils/evalUtils.js >', (done) => {
       };
       try {
         eu.validateSamples(sampleArr, gen);
-        done('Expecting TransformError');
+        done(new Error('Expecting TransformError'));
       } catch (err) {
         expect(err.name).to.be.equal('TransformError');
         done();
@@ -765,7 +765,7 @@ describe('test/utils/evalUtils.js >', (done) => {
       };
       try {
         eu.validateSamples(sampleArr, gen);
-        done('Expecting TransformError');
+        done(new Error('Expecting TransformError'));
       } catch (err) {
         expect(err.name).to.be.equal('TransformError');
         done();
@@ -785,7 +785,7 @@ describe('test/utils/evalUtils.js >', (done) => {
       };
       try {
         eu.validateSamples(sampleArr, gen);
-        done('Expecting ValidationError');
+        done(new Error('Expecting ValidationError'));
       } catch (err) {
         expect(err.message).to.be.equal('Number of samples more than expected.' +
           ' Samples count: 6, Subjects count: 2, Aspects count: 2');
@@ -805,7 +805,7 @@ describe('test/utils/evalUtils.js >', (done) => {
       };
       try {
         eu.validateSamples(sampleArr, gen);
-        done('Expecting ValidationError');
+        done(new Error('Expecting ValidationError'));
       } catch (err) {
         expect(err.message).to.be.equal('Number of samples more than expected.' +
           ' Samples count: 3, Subjects count: 1, Aspects count: 2');
@@ -825,7 +825,7 @@ describe('test/utils/evalUtils.js >', (done) => {
       };
       try {
         eu.validateSamples(sampleArr, gen);
-        done('Expecting ValidationError');
+        done(new Error('Expecting ValidationError'));
       } catch (err) {
         expect(err.name).to.be.equal('ValidationError');
         done();
@@ -844,7 +844,7 @@ describe('test/utils/evalUtils.js >', (done) => {
       };
       try {
         eu.validateSamples(sampleArr, gen);
-        done('Expecting ValidationError');
+        done(new Error('Expecting ValidationError'));
       } catch (err) {
         expect(err.name).to.be.equal('ValidationError');
         done();
@@ -863,7 +863,7 @@ describe('test/utils/evalUtils.js >', (done) => {
       };
       try {
         eu.validateSamples(sampleArr, gen);
-        done('Expecting ValidationError');
+        done(new Error('Expecting ValidationError'));
       } catch (err) {
         expect(err.name).to.be.equal('ValidationError');
         done();
@@ -882,7 +882,7 @@ describe('test/utils/evalUtils.js >', (done) => {
       };
       try {
         eu.validateSamples(sampleArr, gen);
-        done('Expecting ValidationError');
+        done(new Error('Expecting ValidationError'));
       } catch (err) {
         expect(err.message).to.be.equal('Duplicate sample found: s1|a2');
         done();
@@ -901,7 +901,7 @@ describe('test/utils/evalUtils.js >', (done) => {
       };
       try {
         eu.validateSamples(sampleArr, gen);
-        done('Expecting TransformError');
+        done(new Error('Expecting TransformError'));
       } catch (err) {
         expect(err.name).to.be.equal('TransformError');
         done();
