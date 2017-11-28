@@ -101,7 +101,7 @@ describe('test/getTransformFunction.js >', (done) => {
     try {
       collectRes.res.statusCode = 500;
       const expectedRetVal = collectRes.generatorTemplate.transform
-        .errorHandlers['5..'];
+        .errorHandlers['500'];
       const retval = getTransformFunction(collectRes.generatorTemplate
         .transform, collectRes.res.statusCode);
       expect(retval).to.equal(expectedRetVal);
@@ -148,20 +148,6 @@ describe('test/getTransformFunction.js >', (done) => {
       const retval = getTransformFunction(collectRes.generatorTemplate
         .transform, collectRes.res.statusCode);
       expect(retval).to.equal(false);
-      done();
-    } catch (err) {
-      done(err);
-    }
-  });
-
-  it('error handler multiple match - should return first match', (done) => {
-    try {
-      collectRes.res.statusCode = 500;
-      const expectedRetVal = collectRes.generatorTemplate.transform
-        .errorHandlers['5..'];
-      const retval = getTransformFunction(collectRes.generatorTemplate
-        .transform, collectRes.res.statusCode);
-      expect(retval).to.equal(expectedRetVal);
       done();
     } catch (err) {
       done(err);

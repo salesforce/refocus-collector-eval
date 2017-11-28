@@ -116,8 +116,8 @@ class RefocusCollectorEval {
       let regexMatch = false;
       for (let i = 0; i < statusMatchers.length; i++) {
         const sm = statusMatchers[i];
-        /* Short circuit for exact match! */
-        if (/\\d\\d\\d/.test(sm) && sm === status) {
+        /* Short circuit for exact match */
+        if (sm.toString() === status.toString()) {
           return transform.errorHandlers[sm];
         }
 
