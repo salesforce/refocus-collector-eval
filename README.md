@@ -24,6 +24,7 @@ Returns the matched function.
   const sampleArr = RefocusCollectorEval.safeTransform(transformFunc, args);
   const url = RefocusCollectorEval.safeToUrl(toUrlFunc, args);
   const func = RefocusCollectorEval.statusCodeMatch(transform, status);
+  const sampleSchema = RefocusCollectorEval.sampleSchema;
   ```
 
 ## Projects using this module
