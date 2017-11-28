@@ -12,6 +12,7 @@
 'use strict';
 const expect = require('chai').expect;
 const eu = require('../src/evalUtils');
+const sinon = require('sinon');
 
 describe('test/utils/evalUtils.js >', (done) => {
   describe('validateTransformArgs >', (done) => {
@@ -381,8 +382,8 @@ describe('test/utils/evalUtils.js >', (done) => {
       }
     });
 
-    it('no console.log', (done) => {
-      const str = `console.log('Hello, World!');`;
+    it('no module.exports', (done) => {
+      const str = `return module.exports`;
       try {
         eu.safeEval(str);
         done('Expecting FunctionBodyError here');
@@ -394,6 +395,21 @@ describe('test/utils/evalUtils.js >', (done) => {
         }
       }
     });
+
+    it('no exports', (done) => {
+      const str = `return exports`;
+      try {
+        eu.safeEval(str);
+        done('Expecting FunctionBodyError here');
+      } catch (err) {
+        if (err.name === 'FunctionBodyError') {
+          done();
+        } else {
+          done('Expecting FunctionBodyError here');
+        }
+      }
+    });
+
 
     it('no eval', (done) => {
       const str = `eval('3+3')`;
@@ -412,7 +428,7 @@ describe('test/utils/evalUtils.js >', (done) => {
     it('no access to "process"', (done) => {
       const str = `return process.env`;
       try {
-        const retval = eu.safeEval(str);
+        eu.safeEval(str);
         done('Expecting FunctionBodyError here');
       } catch (err) {
         if (err.name === 'FunctionBodyError') {
@@ -424,9 +440,9 @@ describe('test/utils/evalUtils.js >', (done) => {
     });
 
     it('no setTimeout', (done) => {
-      const str = `return setTimeout(() => return 'Hi!', 1);`;
+      const str = `return setTimeout(() => 'Hi!', 1);`;
       try {
-        const retval = eu.safeEval(str);
+        eu.safeEval(str);
         done('Expecting FunctionBodyError here');
       } catch (err) {
         if (err.name === 'FunctionBodyError') {
@@ -438,9 +454,37 @@ describe('test/utils/evalUtils.js >', (done) => {
     });
 
     it('no setInterval', (done) => {
-      const str = `return setInterval(() => return 'Hi!', 1);`;
+      const str = `return setInterval(() => 'Hi!', 1);`;
       try {
-        const retval = eu.safeEval(str);
+        eu.safeEval(str);
+        done('Expecting FunctionBodyError here');
+      } catch (err) {
+        if (err.name === 'FunctionBodyError') {
+          done();
+        } else {
+          done('Expecting FunctionBodyError here');
+        }
+      }
+    });
+
+    it('no __dirname', (done) => {
+      const str = `return __dirname`;
+      try {
+        eu.safeEval(str);
+        done('Expecting FunctionBodyError here');
+      } catch (err) {
+        if (err.name === 'FunctionBodyError') {
+          done();
+        } else {
+          done('Expecting FunctionBodyError here');
+        }
+      }
+    });
+
+    it('no __filename', (done) => {
+      const str = `return __filename`;
+      try {
+        eu.safeEval(str);
         done('Expecting FunctionBodyError here');
       } catch (err) {
         if (err.name === 'FunctionBodyError') {
@@ -528,7 +572,7 @@ describe('test/utils/evalUtils.js >', (done) => {
         'catch (err) { throw err; } ' +
         'return 0; ';
       try {
-        const retval = eu.safeEval(str);
+        eu.safeEval(str);
         done('Expecting error');
       } catch (err) {
         expect(err.name).to.equal('FunctionBodyError');
@@ -581,6 +625,83 @@ describe('test/utils/evalUtils.js >', (done) => {
         expect(err.message).to.contain('Script execution timed out.');
         done();
       }
+    });
+
+    describe('logging >', () => {
+      const methods = ['log', 'info', 'error', 'warn'];
+      let spies = {};
+
+      before(() => {
+        methods.forEach((key) => spies[key] = sinon.spy(console, key));
+      });
+
+      afterEach(() => {
+        methods.forEach((key) => spies[key].reset());
+      });
+
+      after(() => {
+        methods.forEach((key) => spies[key].restore());
+      });
+
+      it('logging not allowed by default', (done) => {
+        const str = `console.log('1');console.info('2');console.error('3');` +
+          `console.warn('4')`;
+        try {
+          eu.safeEval(str);
+          expect(spies.log.called).to.be.false;
+          expect(spies.info.called).to.be.false;
+          expect(spies.error.called).to.be.false;
+          expect(spies.warn.called).to.be.false;
+          done();
+        } catch (err) {
+          done(err);
+        }
+      });
+
+      it('logging ok with flag', (done) => {
+        const str = `console.log('1');console.info('2');console.error('3');` +
+          `console.warn('4');console.log('1');console.info('2');` +
+          `console.error('3');console.warn('4');`;
+        try {
+          eu.safeEval(str, {}, true);
+          expect(spies.log.callCount).to.equal(2);
+          expect(spies.info.callCount).to.equal(2);
+          expect(spies.error.callCount).to.equal(2);
+          expect(spies.warn.callCount).to.equal(2);
+          expect(spies.log.calledWith('1')).to.be.true;
+          expect(spies.info.calledWith('2')).to.be.true;
+          expect(spies.error.calledWith('3')).to.be.true;
+          expect(spies.warn.calledWith('4')).to.be.true;
+          done();
+        } catch (err) {
+          done(err);
+        }
+      });
+
+      it('logging ok even if error', (done) => {
+        const str = `console.log('1');console.info('2');console.error('3');` +
+          `console.warn('4');aaa.bbb();console.log('1');console.info('2');` +
+          `console.error('3');console.warn('4');`;
+        try {
+          eu.safeEval(str, {}, true);
+          done('Expecting FunctionBodyError here');
+        } catch (err) {
+          if (err.name === 'FunctionBodyError') {
+            expect(spies.log.callCount).to.equal(1);
+            expect(spies.info.callCount).to.equal(1);
+            expect(spies.error.callCount).to.equal(1);
+            expect(spies.warn.callCount).to.equal(1);
+            expect(spies.log.calledWith('1')).to.be.true;
+            expect(spies.info.calledWith('2')).to.be.true;
+            expect(spies.error.calledWith('3')).to.be.true;
+            expect(spies.warn.calledWith('4')).to.be.true;
+            done();
+          } else {
+            done('Expecting FunctionBodyError here');
+          }
+        }
+      });
+
     });
   }); // safeEval
 
