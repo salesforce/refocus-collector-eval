@@ -39,7 +39,7 @@ class RefocusCollectorEval {
    * @throws {TransformError} - if transform does not return valid array of
    *  samples
    */
-  static safeTransform(functionBody, args) {
+  static safeTransform(functionBody, args, allowLogging=false) {
     debug('Entered evalUtils.safeTransform', args);
     if (typeof functionBody !== 'string') {
       const msg = 'Transform function body must be a string';
@@ -48,7 +48,7 @@ class RefocusCollectorEval {
 
     utils.validateTransformArgs(args);
     args.SAMPLE_BODY_MAX_LEN = SAMPLE_BODY_MAX_LEN;
-    const retval = utils.safeEval(functionBody, args);
+    const retval = utils.safeEval(functionBody, args, allowLogging);
     if (retval) {
       debug('safeTransform generated %d samples: %j', retval.length, retval);
     }
@@ -75,7 +75,7 @@ class RefocusCollectorEval {
    * @throws {FunctionBodyError} - if thrown by safeEval function or if function
    *  body is not a string
    */
-  static safeToUrl(functionBody, args) {
+  static safeToUrl(functionBody, args, allowLogging=false) {
     debug('Entered evalUtils.safeToUrl', args);
     if (typeof functionBody !== 'string') {
       const msg = 'toUrl function body must be a string';
@@ -83,7 +83,7 @@ class RefocusCollectorEval {
     }
 
     utils.validateToUrlArgs(args);
-    const retval = utils.safeEval(functionBody, args);
+    const retval = utils.safeEval(functionBody, args, allowLogging);
     if (typeof retval !== 'string') {
       throw new errors.ToUrlError(commonUtils.ERROR_MESSAGE.TO_URL.NOT_STRING);
     }
