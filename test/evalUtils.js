@@ -410,7 +410,6 @@ describe('test/utils/evalUtils.js >', (done) => {
       }
     });
 
-
     it('no eval', (done) => {
       const str = `eval('3+3')`;
       try {
