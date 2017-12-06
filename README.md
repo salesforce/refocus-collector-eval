@@ -6,26 +6,36 @@ Collector eval utils used by Refocus Collector System to validate transform and 
 
 `npm install @salesforce/refocus-collector-eval --save`
 
-## Functions available to import
-### safeTransform function
+## API
+
+### RefocusCollectorEval.safeTransform(transformFunc, args)
+
 Safely executes the given transform function with the arguments provided. Returns array of zero or more samples.
 
-### safeToUrl
+### RefocusCollectorEval.safeToUrl(toUrlFunc, args)
+
 Safely executes the given toUrl function with the arguments provided. Returns the generated url as a string.
 
-### statusCodeMatch
-Check for a status code regex match which maps to a transform for error samples.
-Returns the matched function.
+### RefocusCollectorEval.getTransformFunction(transform, status)
+
+Returns a transform function based on the status code provided. Checks for an exact status match from transform.errorHandlers. If there is an exact match, returns that one. If no exact match is found, checks for a regex status match. If there is an errorHandler defined for the status code based on a regex match, returns the first regex match found. If there is no errorHandler defined for the status code provided, if the status code is 2xx, returns transform.default. If there is no errorHandler AND the status code is NOT 2xx, returns false.
+
+### RefocusCollectorEval.sampleSchema
+
+Returns the Joi schema for sample validation.
 
 ## Usage
-  ```
-  const RefocusCollectorEval = require('@salesforce/refocus-collector-eval');
 
-  const sampleArr = RefocusCollectorEval.safeTransform(transformFunc, args);
-  const url = RefocusCollectorEval.safeToUrl(toUrlFunc, args);
-  const func = RefocusCollectorEval.statusCodeMatch(transform, status);
-  const sampleSchema = RefocusCollectorEval.sampleSchema;
-  ```
+```
+const RefocusCollectorEval = require('@salesforce/refocus-collector-eval');
+
+const sampleArr = RefocusCollectorEval.safeTransform(transformFunc, args);
+const url = RefocusCollectorEval.safeToUrl(toUrlFunc, args);
+const func = RefocusCollectorEval.getTransformFunction(transform, status);
+const sampleSchema = RefocusCollectorEval.sampleSchema;
+```
 
 ## Projects using this module
-[Refocus-Collector](https://github.com/salesforce/refocus-collector)
+
+- [Refocus Collector](https://github.com/salesforce/refocus-collector)
+- [Refocus Sample Generator Template Utils](https://github.com/salesforce/refocus-sample-generator-template-utils)

@@ -49,11 +49,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateTransformArgs({});
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
 
@@ -62,11 +59,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateTransformArgs({ ctx: {} });
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
 
@@ -75,11 +69,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateTransformArgs();
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
 
@@ -88,11 +79,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateTransformArgs(undefined);
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
 
@@ -101,11 +89,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateTransformArgs(null);
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
 
@@ -114,11 +99,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateTransformArgs(123);
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
 
@@ -127,11 +109,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateTransformArgs([1, 2, 3]);
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
 
@@ -140,11 +119,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateTransformArgs('abc defgh');
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
 
@@ -153,11 +129,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateTransformArgs(true);
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
 
@@ -166,11 +139,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateTransformArgs(false);
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
   }); // validateTransformArgs
@@ -194,11 +164,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateToUrlArgs({});
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
 
@@ -207,11 +174,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateToUrlArgs({ ctx: {} });
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
 
@@ -220,11 +184,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateToUrlArgs();
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
 
@@ -233,11 +194,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateToUrlArgs(undefined);
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
 
@@ -246,11 +204,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateToUrlArgs(null);
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
 
@@ -259,11 +214,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateToUrlArgs(123);
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
 
@@ -272,11 +224,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateToUrlArgs([1, 2, 3]);
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
 
@@ -285,11 +234,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateToUrlArgs('abc defgh');
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
 
@@ -298,11 +244,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateToUrlArgs(true);
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
 
@@ -311,11 +254,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateToUrlArgs(false);
         done(new Error('Expecting ArgsError'));
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done(new Error('Expecting ArgsError here'));
-        }
+        expect(err).to.have.property('name', 'ArgsError');
+        done();
       }
     });
   }); // validateToUrlArgs
@@ -350,13 +290,10 @@ describe('test/utils/evalUtils.js >', (done) => {
       `;
       try {
         eu.safeEval(str, ctx);
-        done(new Error('Expecting FunctionBodyError here'));
+        done(new Error('Expecting FunctionBodyError'));
       } catch (err) {
-        if (err.name === 'FunctionBodyError') {
-          done();
-        } else {
-          done(new Error('Expecting FunctionBodyError here'));
-        }
+        expect(err).to.have.property('name', 'FunctionBodyError');
+        done();
       }
     });
 
@@ -414,13 +351,10 @@ describe('test/utils/evalUtils.js >', (done) => {
       const str = `eval('3+3')`;
       try {
         eu.safeEval(str);
-        done(new Error('Expecting FunctionBodyError here'));
+        done(new Error('Expecting FunctionBodyError'));
       } catch (err) {
-        if (err.name === 'FunctionBodyError') {
-          done();
-        } else {
-          done(new Error('Expecting FunctionBodyError here'));
-        }
+        expect(err).to.have.property('name', 'FunctionBodyError');
+        done();
       }
     });
 
@@ -716,9 +650,8 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateSamples(sampleArr, gen);
         done(new Error('Expecting TransformError'));
       } catch (err) {
-        expect(err.message).to.be.equal(
-          'The transform function must return an array.'
-        );
+        expect(err.message)
+        .to.be.equal('The transform function must return an array.');
         done();
       }
     });
@@ -734,7 +667,7 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateSamples(sampleArr, gen);
         done(new Error('Expecting TransformError'));
       } catch (err) {
-        expect(err.name).to.be.equal('TransformError');
+        expect(err).to.have.property('name', 'TransformError');
         done();
       }
     });
@@ -750,7 +683,7 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateSamples(sampleArr, gen);
         done(new Error('Expecting TransformError'));
       } catch (err) {
-        expect(err.name).to.be.equal('TransformError');
+        expect(err).to.have.property('name', 'TransformError');
         done();
       }
     });
@@ -766,7 +699,7 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateSamples(sampleArr, gen);
         done(new Error('Expecting TransformError'));
       } catch (err) {
-        expect(err.name).to.be.equal('TransformError');
+        expect(err).to.have.property('name', 'TransformError');
         done();
       }
     });
@@ -826,7 +759,7 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateSamples(sampleArr, gen);
         done(new Error('Expecting ValidationError'));
       } catch (err) {
-        expect(err.name).to.be.equal('ValidationError');
+        expect(err).to.have.property('name', 'ValidationError');
         done();
       }
     });
@@ -845,7 +778,7 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateSamples(sampleArr, gen);
         done(new Error('Expecting ValidationError'));
       } catch (err) {
-        expect(err.name).to.be.equal('ValidationError');
+        expect(err).to.have.property('name', 'ValidationError');
         done();
       }
     });
@@ -864,7 +797,7 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateSamples(sampleArr, gen);
         done(new Error('Expecting ValidationError'));
       } catch (err) {
-        expect(err.name).to.be.equal('ValidationError');
+        expect(err).to.have.property('name', 'ValidationError');
         done();
       }
     });
@@ -902,7 +835,7 @@ describe('test/utils/evalUtils.js >', (done) => {
         eu.validateSamples(sampleArr, gen);
         done(new Error('Expecting TransformError'));
       } catch (err) {
-        expect(err.name).to.be.equal('TransformError');
+        expect(err).to.have.property('name', 'TransformError');
         done();
       }
     });
