@@ -152,10 +152,11 @@ module.exports = {
    *
    * @param {String} functionBody - The body of the function to execute.
    * @param {Object} args - Args to pass through to the function.
+   * @param {Boolean} allowLogging - Allow logging from within the transform.
    * @returns {AnyType}
    * @throws {FunctionBodyError} - if functionBody cannot be evaluated
    */
-  safeEval: (functionBody, args) => {
+  safeEval: (functionBody, args, allowLogging=false) => {
     debug('safeEval functionBody', functionBody);
     'use strict';
     if (!args) {
@@ -163,16 +164,36 @@ module.exports = {
     }
 
     args.eval = undefined; // disable "eval"
+    const logLines = { log: [], info: [], error: [], warn: [], };
+    args.console = {
+      log: (str) => logLines.log.push(str),
+      info: (str) => logLines.info.push(str),
+      error: (str) => logLines.error.push(str),
+      warn: (str) => logLines.warn.push(str),
+    };
     try {
       const vm = new VM({
         timeout: EVAL_TIMEOUT_MILLIS,
         sandbox: args,
       });
-      const retval = vm.run(`(() => { ${functionBody} })()`);
-      return retval;
+      const str = `(() => {${functionBody}})()`;
+      const ret = vm.run(str);
+      handleLogLines(logLines);
+      return ret;
     } catch (err) {
+      handleLogLines(logLines);
       logger.error('%s running safeEval: %s', err.name, err.message);
       throw new errors.FunctionBodyError(`${err.name}: ${err.message}`);
     }
+
+    function handleLogLines(logLines) {
+      if (allowLogging) {
+        logLines.log.forEach((str) => console.log(str));
+        logLines.info.forEach((str) => console.info(str));
+        logLines.error.forEach((str) => console.error(str));
+        logLines.warn.forEach((str) => console.warn(str));
+      }
+    }
+
   }, // safeEval
 };
