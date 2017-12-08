@@ -365,7 +365,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
       const aspects = [{ name: 'Delay', timeout: '1m' }];
       const subjects = [
         { absolutePath: 'Fremont' },
-        { absolutePath: 'UnionCity' }
+        { absolutePath: 'UnionCity' },
       ];
       const connection = {
         headers: { Authorization: 'abddr121345bb', },
@@ -381,7 +381,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
       const aspects = [{ name: 'Delay', timeout: '1m' }];
       const subjects = [
         { absolutePath: 'Fremont' },
-        { absolutePath: 'UnionCity' }
+        { absolutePath: 'UnionCity' },
       ];
       const connection = {
         headers: { Authorization: 'abddr121345bb', },
@@ -397,7 +397,7 @@ describe('test/RefocusCollectorEval.js >', (done) => {
       const aspects = [{ name: 'Delay', timeout: '1m' }];
       const subjects = [
         { absolutePath: 'Fremont' },
-        { absolutePath: 'UnionCity' }
+        { absolutePath: 'UnionCity' },
       ];
       const connection = {
         headers: { Authorization: 'abddr121345bb', },
