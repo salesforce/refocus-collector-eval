@@ -17,6 +17,7 @@ const logger = require('winston');
 const sampleSchema = require('./schema').sample;
 const commonUtils = require('./common');
 const { VM } = require('vm2');
+const template = require('just-template');
 
 const EVAL_TIMEOUT_MILLIS = 750;
 
@@ -196,4 +197,23 @@ module.exports = {
     }
 
   }, // safeEval
+
+  /**
+   * Returns a string after doing the variable expansion based on the context.
+   *
+   * @param {String} s - the string to be expanded
+   * @param {Object} ctx - the context object with properties to be inserted
+   * @returns {String} - the expanded string
+   * @throws {TemplateVariableSubstitutionError} - invalid template string
+   */
+  expand(s, ctx) {
+    debug(`expand(${s}, ${ctx})`);
+    try {
+      const x = template(s, ctx);
+      debug(`expand returning ${x}`);
+      return x;
+    } catch (err) {
+      throw new errors.TemplateVariableSubstitutionError(err.message);
+    }
+  },
 };

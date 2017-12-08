@@ -31,6 +31,7 @@ class RefocusCollectorEval {
    *    source.
    *  {Array} aspects - Array of one or more aspects.
    *  {Array} subjects - An array of one or more subjects.
+   * @param {Boolean} allowLogging - Allow logging from within the transform.
    * @returns {Array} - Array of zero or more samples.
    * @throws {ArgsError} - if thrown by validateTransformArgs function
    * @throws {FunctionBodyError} - if thrown by safeEval function or if function
@@ -67,6 +68,7 @@ class RefocusCollectorEval {
    *  {Object} ctx - The sample generator context.
    *  {Array} aspects - Array of one or more aspects.
    *  {Array} subjects - Array of one or more subjects.
+   * @param {Boolean} allowLogging - Allow logging from within the transform.
    * @returns {String} - The generated url as a string
    * @throws {ToUrlError} - if transform function does not return an array
    *  of zero or more samples
@@ -160,6 +162,68 @@ class RefocusCollectorEval {
   static get sampleSchema() {
     return schema.sample;
   }
+
+  /**
+   * Prepares url of the remote datasource either by expanding the url or by
+   * calling the toUrl function specified in the generator template.
+   *
+   * @param {Object} ctx - The context from the generator
+   * @param {Array} aspects - The aspects from the generator
+   * @param {Array} subjects - The subjects from the generator
+   * @param {Object} connection - The connection obj from the generatorTemplate
+   * @param {Boolean} allowLogging - Allow logging from within the transform.
+   * @returns {String} - Url to the remote datasource
+   * @throws {ValidationError} if connection does not provide url or
+   *  toUrl
+   */
+  static prepareUrl(ctx, aspects, subjects, connection, allowLogging=false) {
+    debug('prepareUrl', connection, ctx, aspects, subjects);
+    let preparedUrl;
+    const { url, toUrl } = connection;
+    if (url) {
+      preparedUrl = utils.expand(url, ctx);
+    } else if (toUrl) {
+      const args = {
+        ctx,
+        aspects,
+        subjects,
+      };
+      const fbody = Array.isArray(toUrl) ? toUrl.join('\n') : toUrl;
+      preparedUrl = this.safeToUrl(fbody, args, allowLogging);
+    } else {
+      throw new errors.ValidationError('The generator template must provide ' +
+        'either a connection.url attribute or a "toUrl" attribute.');
+    }
+
+    debug('prepareUrl returning %s', preparedUrl);
+    return preparedUrl;
+  } // prepareUrl
+
+  /**
+   * Prepares the headers to send by expanding the connection headers specified
+   * by the generator template.
+   *
+   * @param {Object} headers - The headers from generator template connection
+   *  specification
+   * @param {Object} context - The context from the generator
+   * @returns {Object} - the headers object
+   */
+  static prepareHeaders(headers, ctx) {
+    debug('prepareHeaders', headers, ctx);
+    const retval = {
+      Accept: 'application/json', // default
+    };
+    if (headers && typeof headers === 'object') {
+      const hkeys = Object.keys(headers);
+      hkeys.forEach((key) => {
+        retval[key] = utils.expand(headers[key], ctx);
+      });
+    }
+
+    debug('exiting prepareHeaders', retval);
+    return retval;
+  } // prepareHeaders
+
 }
 
 module.exports = RefocusCollectorEval;
