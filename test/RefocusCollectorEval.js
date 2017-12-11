@@ -358,4 +358,74 @@ describe('test/RefocusCollectorEval.js >', (done) => {
       done();
     });
   });
+
+  describe('prepareUrl >', () => {
+    it('url is provided', () => {
+      const ctx = { host: 'bart.gov.api' };
+      const aspects = [{ name: 'Delay', timeout: '1m' }];
+      const subjects = [
+        { absolutePath: 'Fremont' },
+        { absolutePath: 'UnionCity' },
+      ];
+      const connection = {
+        headers: { Authorization: 'abddr121345bb', },
+        url: 'http://{{host}}/status',
+        bulk: true,
+      };
+      const url = rce.prepareUrl(ctx, aspects, subjects, connection);
+      expect(url).to.be.equal('http://bart.gov.api/status');
+    });
+
+    it('toUrl is provided', () => {
+      const ctx = {};
+      const aspects = [{ name: 'Delay', timeout: '1m' }];
+      const subjects = [
+        { absolutePath: 'Fremont' },
+        { absolutePath: 'UnionCity' },
+      ];
+      const connection = {
+        headers: { Authorization: 'abddr121345bb', },
+        toUrl: 'return "http://bart.gov.api/status";',
+        bulk: true,
+      };
+      const url = rce.prepareUrl(ctx, aspects, subjects, connection);
+      expect(url).to.be.equal('http://bart.gov.api/status');
+    });
+
+    it('neither url nor toUrl is provided', (done) => {
+      const ctx = {};
+      const aspects = [{ name: 'Delay', timeout: '1m' }];
+      const subjects = [
+        { absolutePath: 'Fremont' },
+        { absolutePath: 'UnionCity' },
+      ];
+      const connection = {
+        headers: { Authorization: 'abddr121345bb', },
+        bulk: true,
+      };
+      try {
+        const url = rce.prepareUrl(ctx, aspects, subjects, connection);
+        expect(url).to.be.equal('http://bart.gov.api/status');
+        done('Expecting ValidationError');
+      } catch (err) {
+        expect(err.name).to.be.equal('ValidationError');
+        done();
+      }
+    });
+  }); // prepareUrl
+
+  describe('prepareHeaders >', () => {
+    it('OK', () => {
+      const headers = {
+        Accept: 'application/xml',
+        Authorization: 'bearer: {{myToken}}',
+      };
+      const context = {
+        myToken: 'abcdef',
+      };
+      const actual = rce.prepareHeaders(headers, context);
+      expect(actual).to.have.property('Accept', 'application/xml');
+      expect(actual).to.have.property('Authorization', 'bearer: abcdef');
+    });
+  }); // prepareHeaders
 });

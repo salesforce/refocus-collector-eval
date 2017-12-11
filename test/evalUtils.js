@@ -875,4 +875,203 @@ describe('test/utils/evalUtils.js >', (done) => {
       }
     });
   }); // validateSamples
+
+  describe('expand >', () => {
+    it('No expansion needed', (done) => {
+      const url = 'http://www.xyz.com';
+      const expandedUrl = 'http://www.xyz.com';
+      const ctx = {
+        key: '12345',
+        ok: 'true',
+      };
+
+      expect(eu.expand(url, ctx)).to.equal(expandedUrl);
+      done();
+    });
+
+    it('1 variable', (done) => {
+      const url = 'http://www.xyz.com?id={{key}}';
+      const expandedUrl = 'http://www.xyz.com?id=12345';
+      const ctx = {
+        key: '12345',
+      };
+
+      expect(eu.expand(url, ctx)).to.equal(expandedUrl);
+      done();
+    });
+
+    it('2 variables', (done) => {
+      const url = 'http://www.xyz.com?id={{key}}&ok={{ok}}';
+      const expandedUrl = 'http://www.xyz.com?id=12345&ok=true';
+      const ctx = {
+        key: '12345',
+        ok: 'true',
+      };
+
+      expect(eu.expand(url, ctx)).to.equal(expandedUrl);
+      done();
+    });
+
+    it('3 variables', (done) => {
+      const url = 'http://www.{{domain}}.com?id={{key}}&ok={{ok}}';
+      const expandedUrl = 'http://www.xyz.com?id=12345&ok=true';
+      const ctx = {
+        key: '12345',
+        ok: 'true',
+        domain: 'xyz',
+      };
+
+      expect(eu.expand(url, ctx)).to.equal(expandedUrl);
+      done();
+    });
+
+    it('duplicate variables', (done) => {
+      const url = 'http://www.{{domain}}.com?id={{key}}&ok={{key}}';
+      const expandedUrl = 'http://www.xyz.com?id=12345&ok=12345';
+      const ctx = {
+        key: '12345',
+        ok: 'true',
+        domain: 'xyz',
+      };
+
+      expect(eu.expand(url, ctx)).to.equal(expandedUrl);
+      done();
+    });
+
+    it('context missing treats as empty', (done) => {
+      const url = 'http://www.{{domain}}.com?id={{key}}&ok={{ok}}';
+      const ctx = {
+        key: '12345',
+        ok: 'yes',
+      };
+
+      expect(eu.expand(url, ctx)).to.equal('http://www..com?id=12345&ok=yes');
+      done();
+    });
+
+    it('context null ok', (done) => {
+      const url = 'http://www.{{domain1}}{{domain2}}.com?id={{key}}&ok={{ok}}';
+      const expandedUrl = 'http://www.xyz.com?id=12345&ok=true';
+      const ctx = {
+        key: '12345',
+        ok: 'true',
+        domain1: 'xyz',
+        domain2: null,
+      };
+      expect(eu.expand(url, ctx)).to.equal(expandedUrl);
+      done();
+    });
+
+    it('replace with empty string', (done) => {
+      const url = 'http://www.{{domain1}}{{domain2}}.com?id={{key}}&ok={{ok}}';
+      const expandedUrl = 'http://www.xyz.com?id=12345&ok=true';
+      const ctx = {
+        key: '12345',
+        ok: 'true',
+        domain1: 'xyz',
+        domain2: '',
+      };
+
+      expect(eu.expand(url, ctx)).to.equal(expandedUrl);
+      done();
+    });
+
+    it('missing context attribute name? error', (done) => {
+      const url = 'http://www.do{{}}in.com?id={{key}}&ok={{ok}}';
+      const expandedUrl = 'http://www.do---in.com?id=12345&ok=true';
+      const ctx = {
+        key: '12345',
+        ok: 'true',
+        '': '---',
+      };
+
+      try {
+        eu.expand(url, ctx);
+        done('expecting error');
+      } catch (err) {
+        expect(err.name).to.equal('TemplateVariableSubstitutionError');
+        done();
+      }
+    });
+
+    it('space match ok', (done) => {
+      const url = 'http://www.do{{ }}in.com?id={{key}}&ok={{ok}}';
+      const expandedUrl = 'http://www.do---in.com?id=12345&ok=true';
+      const ctx = {
+        key: '12345',
+        ok: 'true',
+        ' ': '---',
+      };
+      expect(eu.expand(url, ctx)).to.equal(expandedUrl);
+      done();
+    });
+
+    it('single character match', (done) => {
+      const url = 'http://www.do{{m}}in.com?id={{key}}&ok={{ok}}';
+      const expandedUrl = 'http://www.do---in.com?id=12345&ok=true';
+      const ctx = {
+        key: '12345',
+        ok: 'true',
+        m: '---',
+      };
+
+      expect(eu.expand(url, ctx)).to.equal(expandedUrl);
+      done();
+    });
+
+    it('unmatched curly brace in template OK', (done) => {
+      const url = 'http://www.{{domain}}}.com?id={{key}}&ok={{ok}}';
+      const expandedUrl = 'http://www.xyz}.com?id=12345&ok=true';
+      const ctx = {
+        key: '12345',
+        ok: 'true',
+        domain: 'xyz',
+      };
+      expect(eu.expand(url, ctx)).to.equal(expandedUrl);
+      done();
+    });
+
+    it('single curly braces inside context attribute name ignored', (done) => {
+      const url = 'http://www.{{do{ma}in}}.com?id={{key}}&ok={{ok}}';
+      const expandedUrl = 'http://www.{{do{ma}in}}.com?id=12345&ok=true';
+      const ctx = {
+        key: '12345',
+        ok: 'true',
+        'do{ma}in': 'xyz',
+      };
+      expect(eu.expand(url, ctx)).to.equal(expandedUrl);
+      done();
+    });
+
+    it('unmatched curly braces inside context attribute name name ok',
+      (done) => {
+        const url = 'http://www.{{do{{ma}}in.com?id={{key}}&ok={{ok}}';
+        const expandedUrl = 'http://www.---in.com?id=12345&ok=true';
+        const ctx = {
+          key: '12345',
+          ok: 'true',
+          'do{{ma': '---',
+        };
+        expect(eu.expand(url, ctx)).to.equal(expandedUrl);
+        done();
+      });
+
+    it('weird curly braces in match (error)', (done) => {
+      const url = 'http://www.{{}}do{{}}in.com?id={{key}}&ok={{ok}}';
+      const expandedUrl = 'http://www.---in.com?id=12345&ok=true';
+      const ctx = {
+        key: '12345',
+        ok: 'true',
+        '}}do{{': '---',
+      };
+
+      try {
+        eu.expand(url, ctx);
+        done('Expecting err');
+      } catch (err) {
+        expect(err.name).to.equal('TemplateVariableSubstitutionError');
+        done();
+      }
+    });
+  }); // expand
 });

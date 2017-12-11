@@ -74,4 +74,12 @@ errors.create({
   parent: errors.FunctionBodyError,
 });
 
+errors.create({
+  name: 'TemplateVariableSubstitutionError',
+  defaultExplanation: 'Invalid template for variable substitution.',
+  defaultResponse: 'Invalid template for variable substitution.',
+  status: 400,
+  parent: errors.SampleGeneratorTemplateError,
+});
+
 module.exports = errors;
