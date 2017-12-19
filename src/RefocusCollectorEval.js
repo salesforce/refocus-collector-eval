@@ -10,6 +10,7 @@
  * src/RefocusCollectorEval.js
  */
 const debug = require('debug')('refocus-collector-eval:main');
+const acceptParser = require('accept-parser');
 const utils = require('./evalUtils');
 const errors = require('./errors');
 const commonUtils = require('./common');
@@ -17,6 +18,43 @@ const u = require('util');
 const schema = require('./schema');
 const RADIX = 10;
 const SAMPLE_BODY_MAX_LEN = 4096;
+const ACCEPT = 'Accept';
+const MIME_SUBTYPE_SEPARATOR = '/';
+/* Node request forces response headers to lower case. */
+const CONTENT_TYPE = 'content-type';
+
+/**
+ * Checks whether the actual content type matches this particular accepted
+ * type.
+ *
+ * @param {Object} acc - one of the array elements returned by parsing the
+ *  Accept headers using "accept-parser"
+ * @param {Object} actual - An object representing the actual content type
+ *  received, with attributes ["contentType", "type", "subtype"]
+ * @returns {Boolean} true if the actual content type matches this particular
+ *  "Accept" entry, either an exact match or a wildcard match
+ */
+function acceptMatcher(acc, actual) {
+  /* Exact match or full wildcard match on both type and subtype */
+  if (actual.contentType === acc.item || acc.item === '*/*') return true;
+
+  /* Otherwise check for "*" wildcard matches */
+  const a = acc.item.split(MIME_SUBTYPE_SEPARATOR);
+  const accepted = {
+    type: a[0],
+    subtype: a[1],
+  };
+
+  /* Exact match type, wildcard subtype */
+  if (actual.type === accepted.type && accepted.subtype === '*') {
+    return true;
+  }
+
+  /* Wildcard type, exact match subtype */
+  if (accepted.type === '*' && accepted.subtype === actual.subtype) {
+    return true;
+  }
+} // acceptMatcher
 
 class RefocusCollectorEval {
   /**
@@ -224,6 +262,50 @@ class RefocusCollectorEval {
     return retval;
   } // prepareHeaders
 
+  /**
+   * Validates the mime type of the response based on the "Accept" header from
+   * the Sample Generator Template's "connection".
+   *
+   * @param {Object} sgtHeaders - The headers specified by the Sample Generator
+   *  Template "connection"
+   * @param {Objects} responseHeaders - The response headers
+   * @returns {Boolean} true if the SGT connection does not specify an "Accept"
+   *  header, OR if the response does not include a "Content-Type" header, OR
+   *  if the array of mime types specified by the SGT connection's "Accept"
+   *  header includes the actual "Content-Type" response header.
+   * @throws {Error} if the Sample Generator Template connection specifies an
+   *  "Accept" header AND the response contains a "Content-Type" header AND the
+   *  actual content type does not match one of the accepted mime types.
+   */
+  static validateResponseType(sgtHeaders, responseHeaders) {
+    debug('validateResponseType', sgtHeaders, responseHeaders);
+    /*
+     * Short circuit return true if no Accept header or no Content-Type header
+     * in the response.
+     */
+    if (!sgtHeaders || !sgtHeaders.hasOwnProperty(ACCEPT) ||
+      !responseHeaders || !responseHeaders.hasOwnProperty(CONTENT_TYPE)) {
+      return true;
+    }
+
+    const acceptedTypes = acceptParser.parse(sgtHeaders[ACCEPT]);
+    debug('Parsed Accept headers', acceptedTypes);
+    const contentType = responseHeaders[CONTENT_TYPE];
+    debug('validateResponseType Accept:', sgtHeaders[ACCEPT],
+      'Content-Type:', contentType);
+    const c  = contentType.split(MIME_SUBTYPE_SEPARATOR);
+    const actual = {
+      contentType,
+      type: c[0],
+      subtype: c[1],
+    };
+    /* Do any of the "Accept" values match? */
+    if (acceptedTypes.some((acceptedType) =>
+      acceptMatcher(acceptedType, actual))) return true;
+
+    // No matches...
+    throw new Error(`Accept ${sgtHeaders[ACCEPT]} but got ${contentType}`);
+  } // validateResponseType
 }
 
 module.exports = RefocusCollectorEval;
