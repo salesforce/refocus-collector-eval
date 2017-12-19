@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/salesforce/refocus-collector-eval#readme",
   "dependencies": {
+    "accept-parser": "^1.0.1",
     "errors": "^0.3.0",
     "joi": "^13.0.1",
     "just-template": "^1.1.22",
