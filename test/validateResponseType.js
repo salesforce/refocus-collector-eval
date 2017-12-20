@@ -16,7 +16,7 @@ const validateResponseType = require('../src/RefocusCollectorEval')
 
 describe('test/validateResponseType.js >', (done) => {
   const responseHeaders = {
-    'content-type': 'text/html',
+    'content-type': 'text/html; charset=utf-8',
     foo: 'bar',
   };
 

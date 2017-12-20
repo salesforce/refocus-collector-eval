@@ -20,6 +20,7 @@ const RADIX = 10;
 const SAMPLE_BODY_MAX_LEN = 4096;
 const ACCEPT = 'Accept';
 const MIME_SUBTYPE_SEPARATOR = '/';
+const CONTENT_TYPE_SEPARATOR = ';';
 /* Node request forces response headers to lower case. */
 const CONTENT_TYPE = 'content-type';
 
@@ -290,7 +291,9 @@ class RefocusCollectorEval {
 
     const acceptedTypes = acceptParser.parse(sgtHeaders[ACCEPT]);
     debug('Parsed Accept headers', acceptedTypes);
-    const contentType = responseHeaders[CONTENT_TYPE];
+    /* Content-Type may contain optional parameters after ";" - ignore them. */
+    const contentType = responseHeaders[CONTENT_TYPE]
+      .split(CONTENT_TYPE_SEPARATOR)[0].trim();
     debug('validateResponseType Accept:', sgtHeaders[ACCEPT],
       'Content-Type:', contentType);
     const c  = contentType.split(MIME_SUBTYPE_SEPARATOR);
