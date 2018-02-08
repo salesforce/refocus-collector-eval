@@ -9,7 +9,6 @@
 /**
  * src/evalUtils.js
  */
-
 const debug = require('debug')('refocus-collector-eval:utils');
 const evalValidation = require('./evalValidation');
 const errors = require('./errors');
@@ -28,6 +27,7 @@ module.exports = {
    * 2) Sample aspect is in aspect array given in generator.
    * 3) Sample subject is in subjects provided in generator.
    * 4) No duplicates samples.
+   *
    * @param  {Array} sampleArr - Sample array
    * @param  {Object} generator - Generator object
    * @throws {TransformError} - if transform function does not return an array
@@ -109,7 +109,7 @@ module.exports = {
    * @throws {ArgsError} - If args missing or incorrect type
    */
   validateTransformArgs: (args) => {
-    debug('Entered evalUtils.validateTransformArgs:', args);
+    debug('Entered evalUtils.validateTransformArgs: %O', args);
     if (!args) {
       throw new errors.ArgsError('Missing args.');
     }
@@ -132,7 +132,7 @@ module.exports = {
    * @throws {ArgsError} - If args missing or incorrect type
    */
   validateToUrlArgs: (args) => {
-    debug('Entered evalUtils.validateToUrlArgs:', args);
+    debug('Entered evalUtils.validateToUrlArgs: %O', args);
     if (!args) {
       throw new errors.ArgsError('Missing args.');
     }
@@ -158,7 +158,7 @@ module.exports = {
    * @throws {FunctionBodyError} - if functionBody cannot be evaluated
    */
   safeEval: (functionBody, args, allowLogging=false) => {
-    debug('safeEval functionBody', functionBody);
+    debug('safeEval functionBody: %s', functionBody);
     'use strict';
     if (!args) {
       args = {};
