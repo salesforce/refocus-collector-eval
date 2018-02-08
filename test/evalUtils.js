@@ -1073,5 +1073,41 @@ describe('test/utils/evalUtils.js >', (done) => {
         done();
       }
     });
+
+    it('no string provided', (done) => {
+      expect(eu.expand(undefined, undefined)).to.equal('');
+      expect(eu.expand(null, undefined)).to.equal('');
+      expect(eu.expand('', undefined)).to.equal('');
+      done();
+    });
+
+    it('first arg is not a string', (done) => {
+      expect(eu.expand({ a: 'a' }, undefined)).to.equal('');
+      expect(eu.expand([1, 2, 3], undefined)).to.equal('');
+      expect(eu.expand((() => 1), undefined)).to.equal('');
+      done();
+    });
+
+    it('first arg is empty string', (done) => {
+      expect(eu.expand('', undefined)).to.equal('');
+      done();
+    });
+
+    it('no ctx provided', (done) => {
+      expect(eu.expand('abc', undefined)).to.equal('abc');
+      expect(eu.expand('abc', null)).to.equal('abc');
+      done();
+    });
+
+    it('ctx is not an object', (done) => {
+      expect(eu.expand('abc', 'def')).to.equal('abc');
+      expect(eu.expand('abc', (() => 1))).to.equal('abc');
+      done();
+    });
+
+    it('ctx object has no keys', (done) => {
+      expect(eu.expand('abc', {})).to.equal('abc');
+      done();
+    });
   }); // expand
 });

@@ -207,11 +207,25 @@ module.exports = {
    * @throws {TemplateVariableSubstitutionError} - invalid template string
    */
   expand(s, ctx) {
-    debug(`expand(${s}, ${ctx})`);
+    debug('expand(%s, %O)', s, ctx);
+
+    // If no string provided, return an empty string.
+    if (!s || typeof s !== 'string' || !s.length) {
+      debug('no string provided, expand returning empty string');
+      return '';
+    }
+
+    // If no context provided, return the original string.
+    if (!ctx || typeof ctx !== 'object' || !Object.keys(ctx).length) {
+      debug('no context provided, expand returning original string ' +
+        'unchanged: "%s"', s);
+      return s;
+    }
+
     try {
-      const x = template(s, ctx);
-      debug(`expand returning ${x}`);
-      return x;
+      const expanded = template(s, ctx);
+      debug('expanded "%s" to "%s"', s, expanded);
+      return expanded;
     } catch (err) {
       throw new errors.TemplateVariableSubstitutionError(err.message);
     }
