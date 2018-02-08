@@ -1088,11 +1088,6 @@ describe('test/utils/evalUtils.js >', (done) => {
       done();
     });
 
-    it('first arg is empty string', (done) => {
-      expect(eu.expand('', undefined)).to.equal('');
-      done();
-    });
-
     it('no ctx provided', (done) => {
       expect(eu.expand('abc', undefined)).to.equal('abc');
       expect(eu.expand('abc', null)).to.equal('abc');
