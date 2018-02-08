@@ -569,7 +569,7 @@ describe('test/utils/evalUtils.js >', (done) => {
       });
 
       afterEach(() => {
-        methods.forEach((key) => spies[key].reset());
+        methods.forEach((key) => spies[key].resetHistory());
       });
 
       after(() => {
@@ -987,7 +987,7 @@ describe('test/utils/evalUtils.js >', (done) => {
 
       try {
         eu.expand(url, ctx);
-        done('expecting error');
+        done(new Error('expecting error'));
       } catch (err) {
         expect(err.name).to.equal('TemplateVariableSubstitutionError');
         done();
