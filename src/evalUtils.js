@@ -9,7 +9,6 @@
 /**
  * src/evalUtils.js
  */
-
 const debug = require('debug')('refocus-collector-eval:utils');
 const evalValidation = require('./evalValidation');
 const errors = require('./errors');
@@ -28,6 +27,7 @@ module.exports = {
    * 2) Sample aspect is in aspect array given in generator.
    * 3) Sample subject is in subjects provided in generator.
    * 4) No duplicates samples.
+   *
    * @param  {Array} sampleArr - Sample array
    * @param  {Object} generator - Generator object
    * @throws {TransformError} - if transform function does not return an array
@@ -109,7 +109,7 @@ module.exports = {
    * @throws {ArgsError} - If args missing or incorrect type
    */
   validateTransformArgs: (args) => {
-    debug('Entered evalUtils.validateTransformArgs:', args);
+    debug('Entered evalUtils.validateTransformArgs: %O', args);
     if (!args) {
       throw new errors.ArgsError('Missing args.');
     }
@@ -132,7 +132,7 @@ module.exports = {
    * @throws {ArgsError} - If args missing or incorrect type
    */
   validateToUrlArgs: (args) => {
-    debug('Entered evalUtils.validateToUrlArgs:', args);
+    debug('Entered evalUtils.validateToUrlArgs: %O', args);
     if (!args) {
       throw new errors.ArgsError('Missing args.');
     }
@@ -158,7 +158,7 @@ module.exports = {
    * @throws {FunctionBodyError} - if functionBody cannot be evaluated
    */
   safeEval: (functionBody, args, allowLogging=false) => {
-    debug('safeEval functionBody', functionBody);
+    debug('safeEval functionBody: %s', functionBody);
     'use strict';
     if (!args) {
       args = {};
@@ -207,11 +207,25 @@ module.exports = {
    * @throws {TemplateVariableSubstitutionError} - invalid template string
    */
   expand(s, ctx) {
-    debug(`expand(${s}, ${ctx})`);
+    debug('expand(%s, %O)', s, ctx);
+
+    // If no string provided, return an empty string.
+    if (!s || typeof s !== 'string' || !s.length) {
+      debug('no string provided, expand returning empty string');
+      return '';
+    }
+
+    // If no context provided, return the original string.
+    if (!ctx || typeof ctx !== 'object' || !Object.keys(ctx).length) {
+      debug('no context provided, expand returning original string ' +
+        'unchanged: "%s"', s);
+      return s;
+    }
+
     try {
-      const x = template(s, ctx);
-      debug(`expand returning ${x}`);
-      return x;
+      const expanded = template(s, ctx);
+      debug('expanded "%s" to "%s"', s, expanded);
+      return expanded;
     } catch (err) {
       throw new errors.TemplateVariableSubstitutionError(err.message);
     }
