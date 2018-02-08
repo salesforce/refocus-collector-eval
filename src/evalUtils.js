@@ -86,16 +86,12 @@ module.exports = {
 
       // Check that samples corresponds to only the subjects and aspects passed in
       const subAspArr = sampNameLowerCase.split('|');
-      if (subAspArr.length === 2) {
-        const subjName = subAspArr[0];
-        const aspName = subAspArr[1];
-        if ((!subjectArr.includes(subjName)) || (!aspectArr.includes(aspName))) {
-          throw new errors.ValidationError(
-            `Unknown subject or aspect for sample: ${sampName}`
-          );
-        }
-      } else {
-        throw new errors.ValidationError(`Invalid sample name: ${sampName}`);
+      const subjName = subAspArr[0];
+      const aspName = subAspArr[1];
+      if ((!subjectArr.includes(subjName)) || (!aspectArr.includes(aspName))) {
+        throw new errors.ValidationError(
+          `Unknown subject or aspect for sample: ${sampName}`
+        );
       }
     });
     debug('Sample validation passed; Exiting evalUtils.validateSamples');
