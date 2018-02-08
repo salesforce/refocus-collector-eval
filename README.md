@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/salesforce/refocus-collector-eval/badge.svg)](https://coveralls.io/github/salesforce/refocus-collector-eval)
+
 # Refocus Collector Eval
 
 Collector eval utils used by Refocus Collector System to validate transform and toUrl functions
