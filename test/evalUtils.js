@@ -874,6 +874,25 @@ describe('test/utils/evalUtils.js >', (done) => {
         done(err);
       }
     });
+
+    it('missing subject|subjects', (done) => {
+      const sampleArr = [
+        { name: 'S1|A1', value: '10' }, { name: 'S1|A2', value: '2' },
+      ];
+      const gen = {
+        name: 'mockGenerator',
+        aspects: [{ name: 'A1', timeout: '1m' }, { name: 'A2', timeout: '1m' }],
+      };
+      try {
+        eu.validateSamples(sampleArr, gen);
+        done(new Error('Expecting ValidationError'));
+      } catch (err) {
+        expect(err).to.have.property('name', 'ValidationError');
+        expect(err).to.have.property('message', 'Generator passed to ' +
+          'validateSamples should have "subjects" or "subject"');
+        done();
+      }
+    });
   }); // validateSamples
 
   describe('expand >', () => {
