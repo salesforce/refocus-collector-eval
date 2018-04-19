@@ -53,10 +53,9 @@ module.exports = {
 
     aspects.forEach((a, n) => {
       isObject(`aspects[${n}]`, a);
-      if (typeof a.name !== 'string' || !a.name.length ||
-      typeof a.timeout !== 'string' || !a.timeout.length) {
+      if (typeof a.name !== 'string' || !a.name.length) {
         throw new errors.ArgsError('Every element in the "aspects" array ' +
-          'must be a valid aspect.');
+          'must contain an aspect name.');
       }
     });
 
