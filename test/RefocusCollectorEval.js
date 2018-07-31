@@ -428,4 +428,120 @@ describe('test/RefocusCollectorEval.js >', (done) => {
       expect(actual).to.have.property('Authorization', 'bearer: abcdef');
     });
   }); // prepareHeaders
+
+  describe('validateResponseBody >', () => {
+    const schema = JSON.stringify({
+      type: 'object',
+      properties: {
+        body: {
+          type: 'object',
+          required: ['prop1'],
+          properties: {
+            prop1: { type: 'string', },
+            prop2: { type: 'number', },
+          },
+        },
+      },
+    });
+
+    it('valid', () => {
+      const res = {
+        body: {
+          prop1: '...',
+        },
+      };
+      expect(() => rce.validateResponseBody(res, schema)).to.not.throw();
+    });
+
+    it('invalid - wrong type', () => {
+      const res = {
+        body: {
+          prop1: '...',
+          prop2: '...',
+        },
+      };
+      expect(() => rce.validateResponseBody(res, schema)).to.throw(
+        'Response validation failed - /body/prop2 - ' +
+        'should be number'
+      );
+    });
+
+    it('invalid - required prop missing', () => {
+      const res = {
+        body: {
+          prop2: 4,
+        },
+      };
+      expect(() => rce.validateResponseBody(res, schema)).to.throw(
+        'Response validation failed - /body - ' +
+        "should have required property 'prop1'"
+      );
+    });
+
+    it('response empty (ok)', () => {
+      const res = {};
+      expect(() => rce.validateResponseBody(res, schema)).to.not.throw();
+    });
+
+    it('response null (error)', () => {
+      const res = null;
+      expect(() => rce.validateResponseBody(res, schema)).to.throw(
+        'Response validation failed - / - should be object'
+      );
+    });
+
+    it('response not an object (error)', () => {
+      const res = '...';
+      expect(() => rce.validateResponseBody(res, schema)).to.throw(
+        'Response validation failed - res must be an object'
+      );
+    });
+
+    it('schema empty (ok)', () => {
+      const schema = '{}';
+      const res = {
+        body: {
+          prop1: '...',
+        },
+      };
+      expect(() => rce.validateResponseBody(res, schema)).to.not.throw();
+    });
+
+    it('schema not a string (error)', () => {
+      const schema = {};
+      const res = {
+        body: {
+          prop1: '...',
+        },
+      };
+      expect(() => rce.validateResponseBody(res, schema)).to.throw(
+        'Response validation failed - schema must be a string'
+      );
+    });
+
+    it('schema invalid json', () => {
+      const schema = 'aaa';
+      const res = {
+        body: {
+          prop1: '...',
+        },
+      };
+      expect(() => rce.validateResponseBody(res, schema)).to.throw(
+        'Response validation failed - schema must be valid JSON'
+      );
+    });
+
+    it('schema null (error)', () => {
+      const schema = {};
+      const res = {
+        body: {
+          prop1: '...',
+        },
+      };
+      expect(() => rce.validateResponseBody(res, schema)).to.throw(
+        'Response validation failed - schema must be a string'
+      );
+    });
+
+  });
 });
