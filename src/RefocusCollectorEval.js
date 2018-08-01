@@ -14,6 +14,7 @@ const acceptParser = require('accept-parser');
 const utils = require('./evalUtils');
 const errors = require('./errors');
 const commonUtils = require('./common');
+const ajv = require('ajv')({ jsonPointers: true });
 const u = require('util');
 const schema = require('./schema');
 const RADIX = 10;
@@ -307,8 +308,41 @@ class RefocusCollectorEval {
       acceptMatcher(acceptedType, actual))) return true;
 
     // No matches...
-    throw new Error(`Accept ${sgtHeaders[ACCEPT]} but got ${contentType}`);
+    throw new errors.ValidationError(
+      `Accept ${sgtHeaders[ACCEPT]} but got ${contentType}`
+    );
   } // validateResponseType
+
+  static validateResponseBody(res, schema) {
+    debug('validateResponseBody', res, schema);
+    if (typeof schema !== 'string') {
+      throw new errors.ValidationError(
+        'Response validation failed - schema must be a string'
+      );
+    }
+
+    if (typeof res !== 'object') {
+      throw new errors.ValidationError(
+        'Response validation failed - res must be an object'
+      );
+    }
+
+    try {
+      schema = JSON.parse(schema);
+    } catch (err) {
+      throw new errors.ValidationError(
+        'Response validation failed - schema must be valid JSON'
+      );
+    }
+
+    if (!ajv.validate(schema, res)) {
+      const err = ajv.errors[0];
+      err.dataPath = err.dataPath || '/'; // log root path as "/"
+      throw new errors.ValidationError(
+        `Response validation failed - ${err.dataPath} - ${err.message}`
+      );
+    }
+  } // validateResponseBody
 }
 
 module.exports = RefocusCollectorEval;
