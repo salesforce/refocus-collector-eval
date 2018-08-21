@@ -1244,5 +1244,13 @@ describe('test/utils/evalUtils.js >', (done) => {
       const data = { a: 3, c: 4 };
       expect(eu.template(str, data)).to.equal('a 3, b , c 4');
     });
+
+    it('spaces in var name', () => {
+      const str = 'this is {{a b}} and so is {{a b}} and this is {{b}}';
+      const data = { 'a b': 3, b: 4 };
+      expect(eu.template(str, data))
+      .to.equal('this is 3 and so is 3 and this is 4');
+    });
+
   });
 });

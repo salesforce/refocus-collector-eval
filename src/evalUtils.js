@@ -20,8 +20,25 @@ const { VM } = require('vm2');
 const EVAL_TIMEOUT_MILLIS = 750;
 
 function template(str, data) {
-  const keysToReplaceRegex = /\{\{([^\}]+)?\}\}/g;
+  /*
+   * Matches all the instances of a string of characters between double curly
+   * braces. For example, applying this regular expression to
+   *   "abc {{a}} {{45 45}} tj3j {{1d[3]}}"
+   * would return these three matches:
+   *   ["{{a}}", "{{45 45}}", "{{1d[3]}}"]
+   */
+  const keysToReplaceRegex = /{{([^}]+)?}}/g;
+
+  /*
+   * Matches an array reference, i.e. variable name followed by a numeric
+   * reference in square brackets, capturing the variable name and the numeric
+   * reference. For example, applying this regular expression to "foo[4]" would
+   * return ["foo[4]", "foo", "4"].
+   * Supports variable names consisting of uppercase and lowercase letters,
+   * numbers, dollar sign ($), underscore (_) and hyphen (-).
+   */
   const arrayKeyRegEx = /([\\$\w\d_-]+)\[(\d+)\]/;
+
   return str.replace(keysToReplaceRegex, (_, key) => {
     const keyParts = key.split('.');
     let value = data;
