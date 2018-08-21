@@ -41,3 +41,6 @@ const sampleSchema = RefocusCollectorEval.sampleSchema;
 
 - [Refocus Collector](https://github.com/salesforce/refocus-collector)
 - [Refocus Sample Generator Template Utils](https://github.com/salesforce/refocus-sample-generator-template-utils)
+
+# Version History
+- 1.9.0: add aspects and subjects to context for url variable substitution; support object and array references in template expansion
