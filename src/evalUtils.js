@@ -16,9 +16,27 @@ const logger = require('winston');
 const sampleSchema = require('./schema').sample;
 const commonUtils = require('./common');
 const { VM } = require('vm2');
-const template = require('just-template');
 
 const EVAL_TIMEOUT_MILLIS = 750;
+
+function template(str, data) {
+  const keysToReplaceRegex = /\{\{([^\}]+)?\}\}/g;
+  const arrayKeyRegEx = /([\\$\w\d_-]+)\[(\d+)\]/;
+  return str.replace(keysToReplaceRegex, (_, key) => {
+    const keyParts = key.split('.');
+    let value = data;
+    keyParts.forEach((k) => {
+      const arrayKey = k.match(arrayKeyRegEx);
+      if (arrayKey) {
+        value = value[arrayKey[1]][arrayKey[2]];
+      } else {
+        value = value[k];
+      }
+    });
+
+    return value || '';
+  });
+} // template
 
 module.exports = {
   /**
@@ -226,4 +244,6 @@ module.exports = {
       throw new errors.TemplateVariableSubstitutionError(err.message);
     }
   },
+
+  template, // for testing only
 };

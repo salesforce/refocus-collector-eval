@@ -369,11 +369,11 @@ describe('test/RefocusCollectorEval.js >', (done) => {
       ];
       const connection = {
         headers: { Authorization: 'abddr121345bb', },
-        url: 'http://{{host}}/status',
+        url: 'http://{{host}}/{{aspects[0].name}}/status/{{subjects[0].absolutePath}}',
         bulk: true,
       };
       const url = rce.prepareUrl(ctx, aspects, subjects, connection);
-      expect(url).to.be.equal('http://bart.gov.api/status');
+      expect(url).to.be.equal('http://bart.gov.api/Delay/status/Fremont');
     });
 
     it('toUrl is provided', () => {
