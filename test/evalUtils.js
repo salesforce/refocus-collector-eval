@@ -1123,5 +1123,134 @@ describe('test/utils/evalUtils.js >', (done) => {
       expect(eu.expand('abc', {})).to.equal('abc');
       done();
     });
+
+    it('ctx has an attribute which is an object', (done) => {
+      const url = 'http://www.xyz.com?id={{a.b}}';
+      const expandedUrl = 'http://www.xyz.com?id=12345';
+      const ctx = {
+        a: {
+          b: '12345',
+        },
+      };
+
+      expect(eu.expand(url, ctx)).to.equal(expandedUrl);
+      done();
+    });
+
+    it('ctx has attribute names with [$_-]', (done) => {
+      const url = 'http://www.xyz.com?id={{a.$b}}&x={{a.c_d}}&y={{a.f-}}' +
+        '&g={{a.g$}}&h={{a._h}}&i={{a.-i}}';
+      const expandedUrl = 'http://www.xyz.com?id=12345&x=yes&y=no&g=g&h=h&i=i';
+      const ctx = {
+        a: {
+          $b: '12345',
+          c_d: 'yes',
+          'f-': 'no',
+          g$: 'g',
+          _h: 'h',
+          '-i': 'i',
+        },
+      };
+
+      expect(eu.expand(url, ctx)).to.equal(expandedUrl);
+      done();
+    });
+
+    it('ctx has an attribute which is an array', (done) => {
+      const url = 'http://www.xyz.com?id={{foo2[1]}}';
+      const expandedUrl = 'http://www.xyz.com?id=12345';
+      const ctx = {
+        foo2: [0, 12345, 67890],
+      };
+
+      expect(eu.expand(url, ctx)).to.equal(expandedUrl);
+      done();
+    });
+
+    it('ctx has an attribute which is an array of objects', (done) => {
+      const url = 'http://www.xyz.com?id={{foo2[1].counter}}';
+      const expandedUrl = 'http://www.xyz.com?id=12345';
+      const ctx = {
+        foo2: [{ counter: 0 }, { counter: 12345 }, { counter: 67890 }],
+      };
+
+      expect(eu.expand(url, ctx)).to.equal(expandedUrl);
+      done();
+    });
+
+    it('ctx has mixed attributes (array, object, etc.)', (done) => {
+      const url = 'http://www.xyz.com/{{name}}?id={{foo2[1].counter}}';
+      const expandedUrl = 'http://www.xyz.com/joe?id=12345';
+      const ctx = {
+        foo2: [{ counter: 0 }, { counter: 12345 }, { counter: 67890 }],
+        name: 'joe',
+      };
+
+      expect(eu.expand(url, ctx)).to.equal(expandedUrl);
+      done();
+    });
+
+    it('ctx has an attribute which is an array of objects with an array ' +
+    'attribute', (done) => {
+      const url = 'http://www.xyz.com?id={{foo2[1].arr[0]}}{{foo2[1].counter}}';
+      const expandedUrl = 'http://www.xyz.com?id=d12345';
+      const ctx = {
+        foo2: [
+          { counter: 0, arr: ['a', 'b', 'c'] },
+          { counter: 12345, arr: ['d', 'e', 'f'] },
+          { counter: 67890, arr: ['g', 'h', 'i'] },
+        ],
+      };
+
+      expect(eu.expand(url, ctx)).to.equal(expandedUrl);
+      done();
+    });
   }); // expand
+
+  describe('template >', () => {
+    it('variable used more than once', () => {
+      const str = 'this is {{a}} and so is {{a}} and this is {{b}}';
+      const data = { a: 3, b: 4 };
+      expect(eu.template(str, data))
+      .to.equal('this is 3 and so is 3 and this is 4');
+    });
+
+    it('using nested variables', () => {
+      const str = '2 {{a.aa.aaa}}s, a {{a.aa.bbb}}, 3 {{a.bb}}s and a ' +
+        '{{b}}. Yes 1 {{a.aa.bbb}}.';
+      const data = {
+        a: {
+          aa: {
+            aaa: 'apple',
+            bbb: 'pear',
+          },
+          bb: 'orange',
+        },
+        b: 'plum',
+      };
+      expect(eu.template(str, data))
+        .to.equal('2 apples, a pear, 3 oranges and a plum. Yes 1 pear.');
+    });
+
+    it('overlapping variables resolve', () => {
+      const str = 'the answer is {{a{{b}}hmmm}}';
+      const data = { a: 3, 'a{{b': 4 };
+      expect(eu.template(str, data))
+        .to.equal('the answer is 4hmmm}}');
+    });
+
+    it('unresolved variables return empty strings', () => {
+      const str = 'a {{a}}, b {{b}}, c {{c}}';
+      const data = { a: 3, c: 4 };
+      expect(eu.template(str, data)).to.equal('a 3, b , c 4');
+    });
+
+    it('spaces in var name', () => {
+      const str = 'this is {{a b}} and so is {{a b}} and this is {{b}}';
+      const data = { 'a b': 3, b: 4 };
+      expect(eu.template(str, data))
+      .to.equal('this is 3 and so is 3 and this is 4');
+    });
+
+  });
 });

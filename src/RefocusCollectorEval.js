@@ -221,6 +221,8 @@ class RefocusCollectorEval {
     let preparedUrl;
     const { url, toUrl } = connection;
     if (url) {
+      ctx.aspects = aspects;
+      ctx.subjects = subjects;
       preparedUrl = utils.expand(url, ctx);
     } else if (toUrl) {
       const args = {
