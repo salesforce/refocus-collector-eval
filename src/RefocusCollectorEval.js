@@ -345,6 +345,31 @@ class RefocusCollectorEval {
       );
     }
   } // validateResponseBody
+
+  /**
+   * Returns an object after doing the variable expansion based on the context.
+   *
+   * @param {Object} object - Object that needs to expand
+   * @param {Object} ctx - The context from the generator
+   * @returns {Object} - expanded object
+   */
+  static expandObject(object, ctx) {
+    function doTraverse(obj) {
+      for (let key in obj) {
+        if (typeof obj[key] === 'object') {
+          doTraverse(obj[key]);
+        } else {
+          obj[key] = utils.expand(obj[key], ctx);
+        }
+      }
+
+      return obj;
+    }
+
+    let expandedObject = JSON.parse(JSON.stringify(object));
+    expandedObject = doTraverse(expandedObject);
+    return expandedObject;
+  } // expandObject
 }
 
 module.exports = RefocusCollectorEval;

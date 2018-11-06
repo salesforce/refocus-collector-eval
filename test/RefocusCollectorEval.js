@@ -544,4 +544,105 @@ describe('test/RefocusCollectorEval.js >', (done) => {
     });
 
   });
+
+  describe('expandObject >', () => {
+    it('expand one parameter', (done) => {
+      const obj = {
+        abc: '{{test}}',
+      };
+      const ctx = {
+        test: 'qwerty',
+      };
+      const expandedObject = {
+        abc: 'qwerty',
+      };
+
+      expect(rce.expandObject(obj, ctx)).to.deep.equal(expandedObject);
+
+      done();
+    });
+
+    it('expand many parameter', (done) => {
+      const obj = {
+        abc: '{{test}}',
+        abc1: '{{test1}}',
+      };
+      const ctx = {
+        test: 'qwerty',
+        test1: 'qwerty1',
+      };
+      const expandedObject = {
+        abc: 'qwerty',
+        abc1: 'qwerty1',
+      };
+
+      expect(rce.expandObject(obj, ctx)).to.deep.equal(expandedObject);
+
+      done();
+    });
+
+    it('expand recursive object', (done) => {
+      const obj = {
+        abc: '{{test}}',
+        abc1: '{{test1}}',
+        param1: {
+          abc2: '{{test2}}',
+        },
+      };
+      const ctx = {
+        test: 'qwerty',
+        test1: 'qwerty1',
+        test2: 'qwerty2',
+      };
+      const expandedObject = {
+        abc: 'qwerty',
+        abc1: 'qwerty1',
+        param1: {
+          abc2: 'qwerty2',
+        },
+      };
+
+      expect(rce.expandObject(obj, ctx)).to.deep.equal(expandedObject);
+
+      done();
+    });
+
+    it('no need of expand', (done) => {
+      const obj = {
+        abc: 'test',
+        abc1: 'test1',
+      };
+      const ctx = {
+        test: 'qwerty',
+        test1: 'qwerty1',
+      };
+      const expandedObject = {
+        abc: 'test',
+        abc1: 'test1',
+      };
+
+      expect(rce.expandObject(obj, ctx)).to.deep.equal(expandedObject);
+
+      done();
+    });
+
+    it('context missing treats as empty', (done) => {
+      const obj = {
+        abc: '{{test}}',
+        abc1: '{{test1}}',
+      };
+      const ctx = {
+        test2: 'qwerty',
+        test3: 'qwerty1',
+      };
+      const expandedObject = {
+        abc: '',
+        abc1: '',
+      };
+
+      expect(rce.expandObject(obj, ctx)).to.deep.equal(expandedObject);
+
+      done();
+    });
+  });
 });
