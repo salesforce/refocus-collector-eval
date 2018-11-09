@@ -238,8 +238,6 @@ module.exports = {
    * @throws {TemplateVariableSubstitutionError} - invalid template string
    */
   expand(s, ctx) {
-    debug('expand(%s, %O)', s, ctx);
-
     // If no string provided, return an empty string.
     if (!s || typeof s !== 'string' || !s.length) {
       debug('no string provided, expand returning empty string');
@@ -255,7 +253,6 @@ module.exports = {
 
     try {
       const expanded = template(s, ctx);
-      debug('expanded "%s" to "%s"', s, expanded);
       return expanded;
     } catch (err) {
       throw new errors.TemplateVariableSubstitutionError(err.message);
