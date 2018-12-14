@@ -359,7 +359,9 @@ class RefocusCollectorEval {
         if (typeof obj[key] === 'object') {
           doTraverse(obj[key]);
         } else {
-          obj[key] = utils.expand(obj[key], ctx);
+          if (typeof obj[key] === 'string') {
+            obj[key] = utils.expand(obj[key], ctx);
+          }
         }
       }
 

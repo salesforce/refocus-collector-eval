@@ -611,6 +611,8 @@ describe('test/RefocusCollectorEval.js >', (done) => {
       const obj = {
         abc: 'test',
         abc1: 'test1',
+        abc2: true,
+        abc3: 3,
       };
       const ctx = {
         test: 'qwerty',
@@ -619,6 +621,8 @@ describe('test/RefocusCollectorEval.js >', (done) => {
       const expandedObject = {
         abc: 'test',
         abc1: 'test1',
+        abc2: true,
+        abc3: 3,
       };
 
       expect(rce.expandObject(obj, ctx)).to.deep.equal(expandedObject);
