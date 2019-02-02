@@ -43,6 +43,7 @@ const sampleSchema = RefocusCollectorEval.sampleSchema;
 - [Refocus Sample Generator Template Utils](https://github.com/salesforce/refocus-sample-generator-template-utils)
 
 # Version History
+- 1.11.2: Hide secrets from debug output
 - 1.11.1: Expand object bug fix.
 - 1.11.0: Removed unnecessary logging.
 - 1.10.0: Add new expandObject function to apply variable expansion across multiple attributes of an object instead of just for a single stering.
