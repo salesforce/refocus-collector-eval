@@ -10,10 +10,11 @@
  * src/evalValidation.js
  */
 const debug = require('debug')('refocus-collector-eval:validation');
+const hide = require('hide-secrets');
 const errors = require('./errors');
 
 function isObject(name, val) {
-  debug('Entered evalValidation.isObject:', name, val);
+  debug('Entered evalValidation.isObject:', name, hide(val));
   if (val === undefined || val === null) {
     throw new errors.ArgsError(`Missing "${name}" attribute.`);
   }
