@@ -10,7 +10,9 @@
  * test/evalValidation.js
  */
 'use strict';
+const hide = require('hide-secrets');
 const val = require('../src/evalValidation');
+const expect = require('chai').expect;
 
 describe('test/utils/evalValidation.js >', (done) => {
   describe('isObject >', (done) => {
@@ -134,6 +136,29 @@ describe('test/utils/evalValidation.js >', (done) => {
           done('Expecting ArgsError here');
         }
       }
+    });
+  });
+
+  describe('hide-secrets hides secrets', () => {
+    it('object with secrets to hide', () => {
+      const hidden = hide({
+        password: 'i am password',
+        token: 'i am token',
+        hello: 'i am not secret',
+        pass: 'i am pass',
+        auth: 'i am auth',
+        secret: 'i am secret',
+        passphrase: 'i am passphrase',
+      });
+      expect(hidden).to.deep.equal({
+        password: '[SECRET]',
+        token: '[SECRET]',
+        hello: 'i am not secret',
+        pass: '[SECRET]',
+        auth: '[SECRET]',
+        secret: '[SECRET]',
+        passphrase: '[SECRET]',
+      });
     });
   });
 
