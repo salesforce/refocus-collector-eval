@@ -239,6 +239,16 @@ describe('test/utils/evalValidation.js >', (done) => {
         done(err);
       }
     });
+
+    it('args.subjects is empty subjects array', (done) => {
+      try {
+        const args = { subjects: [] };
+        val.validateSubjectArgs(args);
+        done();
+      } catch (err) {
+        done(err);
+      }
+    });
   });
 
   describe('subjects >', (done) => {
@@ -336,13 +346,9 @@ describe('test/utils/evalValidation.js >', (done) => {
     it('subjects is empty array', (done) => {
       try {
         val.subjects([]);
-        done('Expecting ArgsError');
+        done();
       } catch (err) {
-        if (err.name === 'ArgsError') {
-          done();
-        } else {
-          done('Expecting ArgsError here');
-        }
+        done(err);
       }
     });
 

@@ -43,6 +43,7 @@ const sampleSchema = RefocusCollectorEval.sampleSchema;
 - [Refocus Sample Generator Template Utils](https://github.com/salesforce/refocus-sample-generator-template-utils)
 
 # Version History
+- 1.11.3: Update validation to accept empty subjects array
 - 1.11.2: Hide secrets from debug output
 - 1.11.1: Expand object bug fix.
 - 1.11.0: Removed unnecessary logging.

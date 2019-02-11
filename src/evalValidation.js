@@ -66,15 +66,15 @@ module.exports = {
   /**
    * Validates the subject/subjects args.
    *
-   * @param {Array} subjects - An array of one or more subjects.
+   * @param {Array} subjects - An array of zero or more subjects.
    * @returns {Boolean} - true if ok
    * @throws {ArgsError} - If missing or incorrect type
    */
   subjects: (subjects) => {
     debug('Entered evalValidation.subjects:', subjects);
-    if (!subjects || !Array.isArray(subjects) || subjects.length < 1) {
+    if (!subjects || !Array.isArray(subjects)) {
       throw new errors.ArgsError('Must include a "subjects" attribute with ' +
-        'an array of one or more subjects.');
+        'an array of zero or more subjects.');
     }
 
     subjects.forEach((subj, n) => {
