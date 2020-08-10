@@ -2,6 +2,8 @@
 
 # Refocus Collector Eval
 
+Note: this repository is infrequently maintained.
+
 Collector eval utils used by Refocus Collector System to validate transform and toUrl functions
 
 ## Install
